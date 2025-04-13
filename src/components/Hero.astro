@@ -6,27 +6,248 @@ interface Props {
   subtitle: string;
   ctaText?: string;
   ctaLink?: string;
-  backgroundImage?: string;
+  ctaTarget?: string; // Added target parameter for scroll target
+  skyboxUrl?: string;
 }
 
 const {
   title,
   subtitle,
   ctaText = "View Projects",
-  ctaLink = "/projects",
-  backgroundImage = "/images/hero-bg.jpg"
+  ctaLink = "#featured-project", // Changed default to anchor link
+  ctaTarget = "featured-project", // Added default target ID
+  skyboxUrl = "/images/skybox.jpg"
 } = Astro.props;
 ---
 
-<section class="relative h-screen min-h-[700px] bg-cover bg-center text-white flex items-center" style={`background-image: url(${backgroundImage});`}>
-  <div class="absolute inset-0 bg-black/50"></div>
-  <div class="container relative z-10 mx-auto px-4 md:px-8 max-w-screen-xl">
+<section id="hero-container" class="relative h-screen min-h-[700px] text-white flex items-center" data-skybox-url={skyboxUrl}>
+  <!-- Three.js container with higher z-index than previously -->
+  <div id="skybox-container" class="absolute inset-0 z-5"></div>
+  
+  <!-- Content container - apply pointer-events-none to text only -->
+  <div class="container relative z-20 mx-auto px-4 md:px-8 max-w-screen-xl">
     <div class="max-w-2xl">
-      <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">{title}</h1>
-      <p class="text-lg md:text-xl mb-10 opacity-90">{subtitle}</p>
-      {ctaText && ctaLink && (
-        <Button href={ctaLink} variant="primary">{ctaText}</Button>
+      <!-- Apply pointer-events-none to text elements only -->
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight pointer-events-none">{title}</h1>
+      <p class="text-lg md:text-xl mb-10 opacity-90 pointer-events-none">{subtitle}</p>
+      {ctaText && (
+        <a 
+          href={"#" + ctaTarget} 
+          class="bg-black hover:bg-gray-800 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out inline-block"
+        >
+          {ctaText}
+        </a>
       )}
     </div>
   </div>
+  
+  <!-- Debug overlay to show when scene is clicked -->
+  <div id="debug-info" class="absolute top-4 right-4 bg-black/50 p-2 text-white text-sm z-30 hidden">
+    Scene clicked
+  </div>
 </section>
+
+<script>
+  // Import ES modules directly - Vite will handle these
+  import * as THREE from 'https://cdn.skypack.dev/three@0.136.0';
+  import { OrbitControls } from 'https://cdn.skypack.dev/three@0.136.0/examples/jsm/controls/OrbitControls.js';
+
+  // Initialize skybox with OrbitControls
+  const initSkybox = () => {
+    console.log("Initializing skybox...");
+    
+    // Get container and skybox URL from data attribute
+    const container = document.getElementById('skybox-container');
+    const heroContainer = document.getElementById('hero-container');
+    
+    if (!container || !heroContainer) {
+      console.error("Container elements not found");
+      return;
+    }
+    
+    // Get skybox URL from data attribute
+    const skyboxUrl = heroContainer.getAttribute('data-skybox-url') || "/images/skybox.jpg";
+    console.log("Using skybox URL:", skyboxUrl);
+
+    // Set up scene
+    const scene = new THREE.Scene();
+    
+    // Create camera with wider field of view
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    const camera = new THREE.PerspectiveCamera(80, width / height, 0.1, 1000);
+    camera.position.set(0, 0, 0.1); // Move slightly back
+    
+    // Create renderer
+    const renderer = new THREE.WebGLRenderer({ 
+      antialias: true,
+      alpha: true
+    });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    
+    // CRUCIAL: Reset any container styles that might interfere
+    container.style.position = 'absolute';
+    container.style.top = '0';
+    container.style.left = '0';
+    container.style.width = '100%';
+    container.style.height = '100%';
+    container.style.overflow = 'hidden'; // Prevent scrollbars
+    
+    // Add renderer to container
+    container.appendChild(renderer.domElement);
+    
+    // CRUCIAL: Make sure canvas is properly styled and accessible
+    const canvas = renderer.domElement;
+    canvas.style.position = 'absolute';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.style.cursor = 'grab'; // Show grabbing cursor
+    canvas.style.touchAction = 'none'; // Prevent touch scrolling
+    
+    // DEBUG: Add visible click handler to verify events are reaching canvas
+    canvas.addEventListener('pointerdown', (event) => {
+      console.log('Canvas clicked!', event);
+      
+      // Show debug info
+      const debugInfo = document.getElementById('debug-info');
+      if (debugInfo) {
+        debugInfo.classList.remove('hidden');
+        debugInfo.textContent = `Canvas clicked at ${event.clientX}, ${event.clientY}`;
+        
+        // Hide after 2 seconds
+        setTimeout(() => {
+          debugInfo.classList.add('hidden');
+        }, 2000);
+      }
+    });
+    
+    // Set up OrbitControls
+    console.log("Setting up OrbitControls...");
+    const controls = new OrbitControls(camera, canvas);
+    
+    // Configure controls for debugging - make movements very obvious
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.rotateSpeed = 1.0; // Faster rotation
+    controls.enableZoom = true; // Enable zoom for testing
+    controls.zoomSpeed = 1.5;
+    controls.enablePan = false;
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 0.5;
+    
+    console.log("OrbitControls configured:", controls);
+    
+    // Load skybox texture
+    const textureLoader = new THREE.TextureLoader();
+    textureLoader.load(
+      skyboxUrl,
+      (texture) => {
+        console.log("Texture loaded successfully");
+        texture.mapping = THREE.EquirectangularReflectionMapping;
+        scene.background = texture;
+      },
+      undefined,
+      (error) => {
+        console.error("Error loading skybox texture:", error);
+        // Fallback to a color
+        scene.background = new THREE.Color(0x000033);
+      }
+    );
+    
+    // Add test cube to make rotation more obvious
+    const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
+    const cube = new THREE.Mesh(geometry, material);
+    cube.position.set(0, 0, -5); // Position in front of camera
+    scene.add(cube);
+    
+    // Add ambient light so the cube is visible
+    const light = new THREE.AmbientLight(0xffffff, 1);
+    scene.add(light);
+    
+    // Window resize handler
+    function handleResize() {
+      const newWidth = container.clientWidth;
+      const newHeight = container.clientHeight;
+      
+      camera.aspect = newWidth / newHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(newWidth, newHeight);
+    }
+    window.addEventListener('resize', handleResize);
+    
+    // Animation loop
+    function animate() {
+      requestAnimationFrame(animate);
+      
+      // Update controls
+      controls.update();
+      
+      renderer.render(scene, camera);
+    }
+    
+    console.log("Starting animation loop");
+    animate();
+  };
+
+  // Add smooth scroll functionality
+  const initSmoothScroll = () => {
+    // Get all hash links
+    const anchorLinks = document.querySelectorAll('a[href^="#"]');
+    
+    anchorLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        // Get the target id from the href
+        const targetId = link.getAttribute('href').substring(1);
+        const targetElement = document.getElementById(targetId);
+        
+        if (targetElement) {
+          e.preventDefault(); // Prevent default anchor behavior
+          
+          // Calculate the navigation bar height - adjust this value as needed
+          const navHeight = 80; // Estimated height of your navigation bar in pixels
+          
+          // Get the element's position relative to the viewport
+          const targetPosition = targetElement.getBoundingClientRect().top;
+          // Get the current scroll position
+          const startPosition = window.pageYOffset;
+          // Calculate the final position with offset
+          const finalPosition = startPosition + targetPosition - navHeight;
+          
+          // Scroll to the adjusted position
+          window.scrollTo({
+            top: finalPosition,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+  };
+
+  // Initialize when DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log("DOM loaded, initializing Three.js and smooth scroll");
+    initSkybox();
+    initSmoothScroll();
+  });
+</script>
+
+<style is:global>
+  /* CRUCIAL: Make sure nothing is preventing pointer events at the global level */
+  #skybox-container * {
+    pointer-events: auto !important;
+  }
+  
+  /* Only disable pointer events on specific text elements */
+  .pointer-events-none {
+    pointer-events: none !important;
+  }
+
+  /* Basic button style if you're not using Button component */
+  [data-scroll-to] {
+    cursor: pointer;
+  }
+</style>

@@ -38,14 +38,19 @@ const environmentProjects = [
   <Hero 
     title="Sculpting Tomorrow's Worlds in Real-Time 3D"
     subtitle="Where Vision, Code, and Imagination Collide"
+    ctaText="View Featured Project"
+    ctaTarget="featured-project"
   />
   
-  <FeaturedProject 
-    title="Featured Virtual Project"
-    subtitle={featuredProject.subtitle}
-    description={featuredProject.description}
-    imageUrl={featuredProject.imageUrl}
-  />
+  <!-- Added ID here for scroll target -->
+  <div id="featured-project">
+    <FeaturedProject 
+      title="Featured Virtual Project"
+      subtitle={featuredProject.subtitle}
+      description={featuredProject.description}
+      imageUrl={featuredProject.imageUrl}
+    />
+  </div>
   
   <ProjectGrid 
     title="Projects Environments"

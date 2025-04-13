@@ -1,5 +1,5 @@
 {
-  "name": "Studio10b_Website",
+  "name": "studio10b_website",
   "type": "module",
   "version": "0.0.1",
   "scripts": {
@@ -10,15 +10,28 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.6.1"
+    "astro": "^5.6.1",
+    "tailwindcss": "^3.4.17",
+    "three": "^0.175.0"
   },
   "devDependencies": {
+    "@astrojs/sitemap": "^3.0.3",
     "@astrojs/tailwind": "^6.0.2",
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.3",
-    "tailwindcss": "^4.1.3",
-    "@astrojs/image": "^0.18.0",
-    "@astrojs/sitemap": "^3.0.3",
     "sharp": "^0.33.0"
-  }
+  },
+  "description": "A modern website for Studio 10b, a creative studio specializing in 3D real-time environments and virtual experiences, built with Astro.",
+  "main": "postcss.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/3Dean/studio10bwebsite2025.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/3Dean/studio10bwebsite2025/issues"
+  },
+  "homepage": "https://github.com/3Dean/studio10bwebsite2025#readme"
 }

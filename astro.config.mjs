@@ -1,13 +1,14 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
+import logoAnimation from './src/integrations/astro-logo-animation.js';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://studio10b.com',
   // Base path if deploying to a subdirectory
   // base: '/my-base-path',
-  integrations: [tailwind()],
+  integrations: [tailwind(), logoAnimation()],
   outDir: './dist',
   publicDir: './public',
  
@@ -36,7 +37,8 @@ export default defineConfig({
       entrypoint: 'astro/assets/services/sharp'
     }
   },
-  
+  // Enable client-side scripts
+  output: 'server',
   // Optional: Add more integrations if needed
   // integrations: [
   //   image(),
