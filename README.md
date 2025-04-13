@@ -1,13 +1,13 @@
-# Studio hob Website
+# Studio 10b Website
 
-A modern website for Studio hob, a creative studio specializing in 3D real-time environments and virtual experiences, built with Astro.
+A modern website for Studio 10b, a creative studio specializing in 3D real-time environments and virtual experiences, built with Astro.
 
 ## 🚀 Project Structure
 
 The project structure follows Astro's recommended organization:
 
 ```
-📁 studio-hob-website/
+📁 studio-10b-website/
 ├── 📁 public/             # Static assets (images, fonts, etc.)
 ├── 📁 src/
 │   ├── 📁 components/     # Reusable UI components
@@ -31,8 +31,8 @@ The project structure follows Astro's recommended organization:
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/studio-hob-website.git
-cd studio-hob-website
+git clone https://github.com/yourusername/studio-10b-website.git
+cd studio-10b-website
 ```
 
 2. Install dependencies:
