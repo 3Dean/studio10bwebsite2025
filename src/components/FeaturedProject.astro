@@ -1,0 +1,44 @@
+---
+import Button from './Button.astro';
+
+interface Props {
+  title: string;
+  subtitle: string;
+  description: string;
+  imageUrl: string;
+  demoUrl?: string;
+}
+
+const {
+  title,
+  subtitle,
+  description,
+  imageUrl,
+  demoUrl = "#"
+} = Astro.props;
+---
+
+<section class="bg-gray-100 py-24">
+  <div class="container mx-auto px-4 md:px-8 max-w-screen-xl">
+    <div class="grid md:grid-cols-2 gap-16 items-center">
+      <div>
+        <div class="flex items-center gap-4 mb-6">
+          <hr class="w-12 h-0.5 bg-black border-0" />
+          <h2 class="text-4xl font-bold m-0">{title}</h2>
+        </div>
+        <h3 class="text-xl font-medium mb-6 text-gray-600">{subtitle}</h3>
+        <p class="mb-8 leading-relaxed">{description}</p>
+        <Button href={demoUrl} variant="outline">View Demo</Button>
+      </div>
+      <div class="order-first md:order-last">
+        <img 
+          src={imageUrl} 
+          alt={title} 
+          width="600" 
+          height="400" 
+          class="w-full h-auto rounded shadow-xl"
+        />
+      </div>
+    </div>
+  </div>
+</section>

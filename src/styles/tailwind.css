@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Your custom styles that use Tailwind classes */
+@layer components {
+  .container {
+    @apply max-w-[1280px] mx-auto px-4 md:px-8;
+  }
+  
+  .btn {
+    @apply inline-block font-medium text-center transition-all duration-300 rounded;
+  }
+  
+  .btn-primary {
+    @apply bg-black text-white hover:bg-gray-800;
+  }
+  
+  .btn-outline {
+    @apply bg-transparent border border-black text-black hover:bg-black hover:text-white;
+  }
+}

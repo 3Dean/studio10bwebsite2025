@@ -1,0 +1,24 @@
+---
+const navItems = [
+  { label: 'Projects', url: '/projects' },
+  { label: 'About', url: '/about' },
+  { label: 'Contact', url: '/contact' }
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<nav>
+  <ul class="flex gap-20 md:gap-20 list-none p-0 m-0">
+    {navItems.map(item => (
+      <li>
+        <a 
+          href={item.url} 
+          class={`text-white no-underline text-base font-medium transition-opacity duration-300 hover:opacity-80 ${currentPath === item.url ? 'opacity-80' : 'opacity-100'}`}
+        >
+          {item.label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</nav>

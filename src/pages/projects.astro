@@ -1,0 +1,125 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import Hero from '../components/Hero.astro';
+
+// Sample project data
+const projects = [
+  {
+    id: "1",
+    title: "Virtual Reality Museum",
+    category: "VR Experience",
+    imageUrl: "/images/env-project-1.jpg",
+    slug: "vr-museum"
+  },
+  {
+    id: "2",
+    title: "Interactive Medical Training",
+    category: "Education",
+    imageUrl: "/images/env-project-2.jpg",
+    slug: "medical-training"
+  },
+  {
+    id: "3",
+    title: "Architectural Visualization",
+    category: "Visualization",
+    imageUrl: "/images/env-project-3.jpg",
+    slug: "arch-visualization"
+  },
+  {
+    id: "4",
+    title: "Urban Planning Simulator",
+    category: "Simulation",
+    imageUrl: "/images/project-4.jpg",
+    slug: "urban-planning"
+  },
+  {
+    id: "5",
+    title: "Wildlife Conservation Experience",
+    category: "Education",
+    imageUrl: "/images/project-5.jpg",
+    slug: "wildlife-conservation"
+  },
+  {
+    id: "6",
+    title: "Industrial Training Environment",
+    category: "Training",
+    imageUrl: "/images/project-6.jpg",
+    slug: "industrial-training"
+  }
+];
+
+// Category filters
+const categories = ["All", "VR Experience", "Education", "Visualization", "Simulation", "Training"];
+---
+
+<MainLayout title="Projects - Studio hob">
+  <Hero 
+    title="Our Projects"
+    subtitle="Explore Our Virtual Environments & 3D Experiences"
+    backgroundImage="/images/projects-bg.jpg"
+  />
+  
+  <section class="py-24">
+    <div class="container mx-auto px-4 md:px-8">
+      <div class="mb-12">
+        <h2 class="text-2xl font-bold mb-6">Filter by Category</h2>
+        <div class="flex flex-wrap gap-4">
+          {categories.map(category => (
+            <button 
+              class="filter-btn py-2 px-6 text-base rounded border border-gray-200 hover:bg-gray-100 transition-all duration-300 data-[pressed=true]:bg-black data-[pressed=true]:text-white data-[pressed=true]:border-black" 
+              data-category={category}
+              data-pressed={category === "All" ? "true" : "false"}
+            >
+              {category}
+            </button>
+          ))}
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        {projects.map(project => (
+          <div class="project-card overflow-hidden rounded-lg shadow-lg transition-transform duration-300 hover:-translate-y-2" data-category={project.category}>
+            <a href={`/projects/${project.slug}`} class="block text-current no-underline">
+              <div class="h-60 overflow-hidden">
+                <img src={project.imageUrl} alt={project.title} class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
+              </div>
+              <div class="p-6 bg-white">
+                <h3 class="text-xl font-medium mb-2">{project.title}</h3>
+                <span class="text-sm text-gray-600">{project.category}</span>
+              </div>
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</MainLayout>
+
+<script>
+  // Client-side filtering
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const projectCards = document.querySelectorAll('.project-card');
+    
+    filterButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const category = btn.getAttribute('data-category');
+        
+        // Update active state of buttons
+        filterButtons.forEach(button => {
+          button.setAttribute('data-pressed', 'false');
+        });
+        btn.setAttribute('data-pressed', 'true');
+        
+        // Filter projects
+        projectCards.forEach(card => {
+          if (category === 'All' || card.getAttribute('data-category') === category) {
+            card.classList.remove('hidden');
+          } else {
+            card.classList.add('hidden');
+          }
+        });
+      });
+    });
+  });
+</script>

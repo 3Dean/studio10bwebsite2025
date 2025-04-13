@@ -1,26 +1,118 @@
-# Astro Starter Kit: Minimal
+# Studio hob Website
 
-```sh
-npm create astro@latest -- --template minimal
-```
-
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/minimal)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/minimal)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/minimal/devcontainer.json)
-
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+A modern website for Studio hob, a creative studio specializing in 3D real-time environments and virtual experiences, built with Astro.
 
 ## 🚀 Project Structure
 
-Inside of your Astro project, you'll see the following folders and files:
+The project structure follows Astro's recommended organization:
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+```
+📁 studio-hob-website/
+├── 📁 public/             # Static assets (images, fonts, etc.)
+├── 📁 src/
+│   ├── 📁 components/     # Reusable UI components
+│   ├── 📁 layouts/        # Page layouts
+│   ├── 📁 pages/          # Pages and routes
+│   ├── 📁 styles/         # Global styles
+│   └── 📁 data/           # Data files
+├── astro.config.mjs       # Astro configuration
+├── package.json           # Project dependencies
+└── tsconfig.json          # TypeScript configuration
+```
+
+## 🧞 Getting Started
+
+### Prerequisites
+
+- Node.js (v16.x or later)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/studio-hob-website.git
+cd studio-hob-website
+```
+
+2. Install dependencies:
+```bash
+npm install
+# or with yarn
+yarn install
+```
+
+3. Start the development server:
+```bash
+npm run dev
+# or with yarn
+yarn dev
+```
+
+4. Open your browser and navigate to `http://localhost:3000`
+
+## 🔧 Building for Production
+
+To create a production build:
+
+```bash
+npm run build
+# or with yarn
+yarn build
+```
+
+Preview the production build:
+
+```bash
+npm run preview
+# or with yarn
+yarn preview
+```
+
+## 📝 Project Features
+
+- Responsive design for all screen sizes
+- Component-based architecture
+- Fast page loads with Astro's partial hydration
+- Dynamic project pages with [slug] routes
+- Image optimization
+- SEO optimization
+
+## 🛠️ Technologies Used
+
+- [Astro](https://astro.build/) - The web framework
+- HTML/CSS - Markup and styling
+- JavaScript - Client-side functionality
+
+## 📱 Pages
+
+- **Home** - Introduction to Studio hob with hero, featured project and grid of projects
+- **Projects** - Filterable grid of all projects
+- **Project Detail** - Detailed view of individual projects with gallery
+- **About** - Information about the studio and team
+- **Contact** - Contact form and information
+
+## 🎨 Customization
+
+### Colors and Typography
+
+You can customize the colors and typography by editing the CSS variables in `src/styles/global.css`.
+
+### Images
+
+Replace the placeholder images in the `public/images/` directory with your own images. Make sure to maintain the same filenames or update the references in the components.
+
+### Content
+
+Update the sample data in the components and pages with your actual content.
+
+## 📬 Contact
+
+For any questions or feedback, please reach out to [your@email.com](mailto:your@email.com).
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
 ```
 
 Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
@@ -42,6 +134,3 @@ All commands are run from the root of the project, from a terminal:
 | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
 
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).

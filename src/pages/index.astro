@@ -1,16 +1,56 @@
 ---
+import MainLayout from '../layouts/MainLayout.astro';
+import Hero from '../components/Hero.astro';
+import FeaturedProject from '../components/FeaturedProject.astro';
+import ProjectGrid from '../components/ProjectGrid.astro';
 
+// Sample data (in a real project, this would come from a CMS or data files)
+const featuredProject = {
+  title: "Featured Virtual Project",
+  subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing ut labore et dolore",
+  description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.",
+  imageUrl: "/images/featured-project.jpg"
+};
+
+const environmentProjects = [
+  {
+    id: "1",
+    title: "Lorem ipsum dolor sit amet",
+    imageUrl: "/images/env-project-1.jpg",
+    slug: "env-project-1"
+  },
+  {
+    id: "2",
+    title: "Lorem ipsum dolor sit amet",
+    imageUrl: "/images/env-project-2.jpg",
+    slug: "env-project-2"
+  },
+  {
+    id: "3",
+    title: "Lorem ipsum dolor sit amet",
+    imageUrl: "/images/env-project-3.jpg",
+    slug: "env-project-3"
+  }
+];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<MainLayout title="Studio hob - Sculpting Tomorrow's Worlds in Real-Time 3D">
+  <Hero 
+    title="Sculpting Tomorrow's Worlds in Real-Time 3D"
+    subtitle="Where Vision, Code, and Imagination Collide"
+  />
+  
+  <FeaturedProject 
+    title="Featured Virtual Project"
+    subtitle={featuredProject.subtitle}
+    description={featuredProject.description}
+    imageUrl={featuredProject.imageUrl}
+  />
+  
+  <ProjectGrid 
+    title="Projects Environments"
+    description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor aliqua. Quis ipsum suspendisse ultrices, maecenas accumsan lacus vel facilisis."
+    projects={environmentProjects}
+    buttonText="View Demo"
+  />
+</MainLayout>
