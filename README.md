@@ -96,7 +96,7 @@ yarn preview
 
 ### Colors and Typography
 
-You can customize the colors and typography by editing the CSS variables in `src/styles/global.css`.
+You can customize the colors and typography by editing the CSS variables in `src/styles/tailwind.css`.
 
 ### Images
 

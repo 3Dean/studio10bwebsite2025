@@ -8,7 +8,7 @@ interface Props {
   description?: string;
 }
 
-const { title, description = "Studio hob - Sculpting Tomorrow's Worlds in Real-Time 3D" } = Astro.props;
+const { title, description = "Studio 10b - Sculpting Tomorrow's Worlds in Real-Time 3D" } = Astro.props;
 ---
 
 <!DOCTYPE html>
@@ -18,7 +18,10 @@ const { title, description = "Studio hob - Sculpting Tomorrow's Worlds in Real-T
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title} | Studio hob</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;400;800&display=swap" rel="stylesheet">
+    <title>{title} | Studio 10b</title>
   </head>
   <body class="min-h-screen flex flex-col">
     <Header />

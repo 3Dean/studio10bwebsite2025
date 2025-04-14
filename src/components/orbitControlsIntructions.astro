@@ -1,0 +1,215 @@
+---
+import Button from './Button.astro';
+
+interface Props {
+  title: string;
+  subtitle: string;
+  ctaText?: string;
+  ctaLink?: string;
+  skyboxUrl?: string;
+  enableControls?: boolean;
+}
+
+const {
+  title,
+  subtitle,
+  ctaText = "View Projects",
+  ctaLink = "/projects",
+  skyboxUrl = "/images/skybox.jpg",
+  enableControls = true
+} = Astro.props;
+---
+
+<section id="hero-container" class="relative h-screen min-h-[700px] text-white flex items-center">
+  <!-- Three.js container - separate from content -->
+  <div id="skybox-container" class="absolute inset-0 z-0"></div>
+  
+  <!-- Optional overlay - reduced opacity for better scene visibility -->
+  <div class="absolute inset-0 bg-black/20 z-10"></div>
+  
+  <!-- Content container with higher z-index and pointer-events-none -->
+  <div class="container relative z-20 mx-auto px-4 md:px-8 max-w-screen-xl pointer-events-none">
+    <div class="max-w-2xl">
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight text-shadow-lg">{title}</h1>
+      <p class="text-lg md:text-xl mb-10 opacity-90 text-shadow-md">{subtitle}</p>
+      {ctaText && ctaLink && (
+        <!-- Re-enable pointer events just for the button -->
+        <div class="pointer-events-auto inline-block">
+          <Button href={ctaLink} variant="primary">{ctaText}</Button>
+        </div>
+      )}
+    </div>
+  </div>
+  
+  <!-- Optional instruction overlay (fades out after a few seconds) -->
+  {enableControls && (
+    <div id="interaction-hint" class="absolute bottom-8 left-0 right-0 text-center text-white opacity-80 z-20 pointer-events-none">
+      <p class="text-sm md:text-base">
+        <span class="inline-block animate-bounce mr-2">↔️</span>
+        Click and drag to explore the scene
+      </p>
+    </div>
+  )}
+</section>
+
+<script>
+  // Import ES modules directly - Vite will handle these
+  import * as THREE from 'https://cdn.skypack.dev/three@0.136.0';
+  import { OrbitControls } from 'https://cdn.skypack.dev/three@0.136.0/examples/jsm/controls/OrbitControls.js';
+
+  // Initialize skybox with OrbitControls
+  const initSkybox = () => {
+    // Skybox URL from component props or use default
+    const skyboxUrl = document.getElementById('skybox-container')?.getAttribute('data-skybox') || "/images/skybox.jpg";
+    
+    // Get container
+    const container = document.getElementById('skybox-container');
+    if (!container) {
+      console.error("Skybox container not found");
+      return;
+    }
+
+    // Set up scene
+    const scene = new THREE.Scene();
+    
+    // Create camera
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+    
+    // Position camera slightly off-center
+    camera.position.set(0, 0, 0.01);
+    
+    // Create renderer
+    const renderer = new THREE.WebGLRenderer({ 
+      antialias: true,
+      alpha: true
+    });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    
+    // Add renderer to the dedicated container
+    container.appendChild(renderer.domElement);
+    
+    // Make sure the canvas element has the right styles
+    renderer.domElement.style.position = 'absolute';
+    renderer.domElement.style.top = '0';
+    renderer.domElement.style.left = '0';
+    renderer.domElement.style.width = '100%';
+    renderer.domElement.style.height = '100%';
+    
+    // Set up OrbitControls
+    const controls = new OrbitControls(camera, renderer.domElement);
+    
+    // Configure OrbitControls for skybox navigation
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.rotateSpeed = 0.5;
+    controls.enableZoom = false;
+    controls.enablePan = false;
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 0.2;
+    
+    // Initial rotation to an interesting part of the skybox
+    camera.rotation.y = Math.PI / 4;
+    
+    // Add event listener to detect user interaction and pause autorotate
+    renderer.domElement.addEventListener('pointerdown', () => {
+      controls.autoRotate = false;
+      
+      // Hide the interaction hint when user interacts
+      const hint = document.getElementById('interaction-hint');
+      if (hint) {
+        hint.style.opacity = '0';
+        hint.style.transition = 'opacity 0.5s ease';
+      }
+    });
+    
+    // Load skybox texture
+    const textureLoader = new THREE.TextureLoader();
+    textureLoader.load(
+      skyboxUrl,
+      (texture) => {
+        console.log("Texture loaded successfully");
+        texture.mapping = THREE.EquirectangularReflectionMapping;
+        scene.background = texture;
+      },
+      (progress) => {
+        console.log("Loading progress:", progress);
+      },
+      (error) => {
+        console.error("Error loading skybox texture:", error);
+        // Fallback to a color
+        scene.background = new THREE.Color(0x000033);
+      }
+    );
+    
+    // Set up window resize handler
+    function handleResize() {
+      const newWidth = container.clientWidth;
+      const newHeight = container.clientHeight;
+      
+      camera.aspect = newWidth / newHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(newWidth, newHeight);
+    }
+    window.addEventListener('resize', handleResize);
+    
+    // Animation loop
+    function animate() {
+      requestAnimationFrame(animate);
+      
+      // Update controls
+      controls.update();
+      
+      renderer.render(scene, camera);
+    }
+    
+    // Start animation
+    animate();
+    
+    // Hide interaction hint after 5 seconds
+    setTimeout(() => {
+      const hint = document.getElementById('interaction-hint');
+      if (hint) {
+        hint.style.opacity = '0';
+        hint.style.transition = 'opacity 0.8s ease';
+      }
+    }, 5000);
+    
+    // Return cleanup function
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      container.removeChild(renderer.domElement);
+      renderer.dispose();
+    };
+  };
+
+  // Initialize when DOM is loaded
+  document.addEventListener('DOMContentLoaded', initSkybox);
+  
+  // Pass props to the script
+  document.addEventListener('DOMContentLoaded', () => {
+    const container = document.getElementById('skybox-container');
+    const heroContainer = document.getElementById('hero-container');
+    
+    if (container && heroContainer) {
+      // Get skybox URL from data attribute if it exists
+      const skyboxUrl = heroContainer.getAttribute('data-skybox');
+      if (skyboxUrl) {
+        container.setAttribute('data-skybox', skyboxUrl);
+      }
+    }
+  });
+</script>
+
+<style>
+  /* Add text shadow for better readability against varying skybox backgrounds */
+  .text-shadow-lg {
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5), 0 4px 8px rgba(0,0,0,0.25);
+  }
+  
+  .text-shadow-md {
+    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }
+</style>

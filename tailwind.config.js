@@ -7,11 +7,19 @@ module.exports = {
       colors: {
         'primary': '#ff3b30',
         'dark': '#111111',
+        'symbols': 'Tomato',
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        heading: ['Manrope', 'sans-serif'],
+        sans: ['Fira Sans', 'sans-serif'],
+        heading: ['Fira Sans', 'sans-serif'],
       },
+      extend: {
+        fontWeight: {
+          light: 300,
+          normal: 400,
+          extrabold: 800,
+        }
+      }
     },
   },
   plugins: [],
