@@ -6,9 +6,9 @@ import ProjectGrid from '../components/ProjectGrid.astro';
 
 // Sample data (in a real project, this would come from a CMS or data files)
 const featuredProject = {
-  title: "Featured Virtual Project",
-  subtitle: "Lorem ipsum dolor sit amet, consectetur adipiscing ut labore et dolore",
-  description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas accumsan lacus vel facilisis.",
+  title: "Immersive Outcomes",
+  subtitle: "A testbed for physics, shaders, and real-time rendering.",
+  description: "Step into a browser-based immersive world crafted with Three.js, where interactive lighting effects, ambient music, and dynamic particles come together to create a rich sensory experience. This tech demo showcases the potential of real-time WebGL environments — blending art, atmosphere, and interactivity. At its heart lies a virtual art gallery, where users can explore creative works in a space that feels alive, responsive, and thoughtfully designed. Every detail — from reactive lighting to floating particles — is engineered to pull the viewer deeper into the narrative of the space.",
   imageUrl: "/images/featured-project.jpg"
 };
 
@@ -16,19 +16,19 @@ const environmentProjects = [
   {
     id: "1",
     title: "Lorem ipsum dolor sit amet",
-    imageUrl: "/images/env-project-1.jpg",
+    imageUrl: "/images/lasalle24500.jpg",
     slug: "env-project-1"
   },
   {
     id: "2",
     title: "Lorem ipsum dolor sit amet",
-    imageUrl: "/images/env-project-2.jpg",
+    imageUrl: "/images/radio500.jpg",
     slug: "env-project-2"
   },
   {
     id: "3",
-    title: "Lorem ipsum dolor sit amet",
-    imageUrl: "/images/env-project-3.jpg",
+    title: "An immersive, walkable 3D environment designed to educate and engage guests",
+    imageUrl: "/images/adam500.jpg",
     slug: "env-project-3"
   }
 ];
@@ -38,14 +38,14 @@ const environmentProjects = [
   <Hero 
     title="Sculpting Tomorrow's Worlds in Real-Time 3D"
     subtitle="Where Vision, Code, and Imagination Collide"
-    ctaText="View Featured Project"
+    ctaText="View Projects"
     ctaTarget="featured-project"
   />
   
   <!-- Added ID here for scroll target -->
   <div id="featured-project">
     <FeaturedProject 
-      title="Featured Virtual Project"
+      title="Project Highlight"
       subtitle={featuredProject.subtitle}
       description={featuredProject.description}
       imageUrl={featuredProject.imageUrl}
@@ -53,9 +53,9 @@ const environmentProjects = [
   </div>
   
   <ProjectGrid 
-    title="Projects Environments"
-    description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor aliqua. Quis ipsum suspendisse ultrices, maecenas accumsan lacus vel facilisis."
+    title="Immersive Outcomes"
+    description="Immersive 3D spaces for galleries, presentations, fashion, and film — featuring audio, video, and interactive design for memorable digital experiences."
     projects={environmentProjects}
-    buttonText="View Demo"
+    buttonText="View Projects"
   />
 </MainLayout>

@@ -7,6 +7,9 @@ interface Props {
   description: string;
   imageUrl: string;
   demoUrl?: string;
+  showButton?: boolean;
+  buttonText?: string;
+  buttonUrl?: string;
 }
 
 const {
@@ -14,7 +17,10 @@ const {
   subtitle,
   description,
   imageUrl,
-  demoUrl = "#"
+  demoUrl = "#",
+  showButton = true,
+  buttonText = "View Demo",
+  buttonUrl = "https://main.d35yh5sp49i51n.amplifyapp.com"
 } = Astro.props;
 ---
 
@@ -26,9 +32,7 @@ const {
         <h2 class="text-4xl md:text-5xl font-extrabold mb-4">{title}</h2>
         <h3 class="text-xl text-gray-600 mb-6">{subtitle}</h3>
         <p class="text-gray-500 mb-8">{description}</p>
-        <a href="#" class="inline-block bg-gray-100 hover:bg-gray-200 text-gray-500 font-regular py-3 px-6 rounded-full transition duration-300 ease-in-out border-2 border-gray-500">
-          Learn More
-        </a>
+        <Button href={buttonUrl} variant="roundwhite">{buttonText}</Button>
       </div>
       <div class="w-full md:w-1/2">
         <img 

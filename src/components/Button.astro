@@ -1,7 +1,7 @@
 ---
 interface Props {
   href: string;
-  variant?: 'primary' | 'outline';
+  variant?: 'primary' | 'outline' | 'roundwhite';
   size?: 'small' | 'medium' | 'large';
 }
 
@@ -13,7 +13,8 @@ const {
 
 const variantClasses = {
   primary: 'bg-black text-white hover:bg-gray-800',
-  outline: 'bg-transparent border border-black text-black hover:bg-black hover:text-white'
+  outline: 'bg-transparent border border-black text-black hover:bg-black hover:text-white',
+  roundwhite: 'bg-gray-100 hover:bg-gray-200 text-gray-500 font-regular py-3 px-6 rounded-full transition duration-300 ease-in-out border-2 border-gray-500 mb-4 md:mb-6'
 };
 
 const sizeClasses = {
