@@ -1,0 +1,8 @@
+# .amplifyignore
+node_modules/
+public/videos/
+src/assets/videos/
+*.mp4
+*.mov
+*.avi
+*.webm

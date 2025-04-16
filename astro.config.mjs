@@ -13,7 +13,7 @@ export default defineConfig({
   publicDir: './public',
   
   // Change from 'server' to 'static'
-  output: 'server',
+  output: 'static',
   adapter: awsAmplify(),
   
   // Server options
@@ -33,9 +33,9 @@ export default defineConfig({
   },
   
   // Image optimization
-  image: {
+/*   image: {
     service: {
       entrypoint: 'astro/assets/services/sharp'
     }
-  }
+  } */
 });
