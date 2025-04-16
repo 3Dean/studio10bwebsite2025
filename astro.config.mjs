@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import tailwind from '@astrojs/tailwind';
 import logoAnimation from './src/integrations/astro-logo-animation.js';
+//import netlify from '@astrojs/adapter-netlify';
 
 // https://astro.build/config
 export default defineConfig({
