@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import tailwind from '@astrojs/tailwind';
 import logoAnimation from './src/integrations/astro-logo-animation.js';
+import awsAmplify from 'astro-aws-amplify';
 
 // https://astro.build/config
 export default defineConfig({
@@ -12,7 +13,8 @@ export default defineConfig({
   publicDir: './public',
   
   // Change from 'server' to 'static'
-  output: 'static',
+  output: 'server',
+  adapter: awsAmplify(),
   
   // Server options
   server: {
