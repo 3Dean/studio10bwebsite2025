@@ -1,0 +1,127 @@
+---
+import Button from './Button.astro';
+
+interface Props {
+  title: string;
+  subtitle: string;
+  backgroundVideo?: string;
+  backgroundImage?: string; // Fallback image
+  videoPoster?: string;
+  category?: string;
+  client?: string;
+  year?: string;
+  filterCategories?: string[];
+}
+
+const {
+  title,
+  subtitle,
+  backgroundVideo = "https://deanyeager.s3.us-east-1.amazonaws.com/PortfolioHubs_2.mp4",
+  backgroundImage = "/images/projects-bg.jpg", // Kept as fallback
+  videoPoster = "/images/projects-bg.jpg",
+  category,
+  client,
+  year,
+  filterCategories = []
+} = Astro.props;
+---
+
+<section class="relative h-[70vh] min-h-[600px] flex items-end text-white">
+  <!-- Background Video -->
+  <div class="absolute inset-0 -z-10 overflow-hidden">
+    <video 
+      class="w-full h-full object-cover"
+      autoplay
+      muted
+      loop
+      playsinline
+      poster={videoPoster}
+    >
+      <source src={backgroundVideo} type="video/mp4" />
+      <!-- Fallback to image if video cannot be played -->
+      <img 
+        src={backgroundImage} 
+        alt={title}
+        class="w-full h-full object-cover"
+      />
+    </video>
+  </div>
+  
+  <!-- Gradient Overlay -->
+  <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-black/5 -z-10"></div>
+  
+  <!-- Content Container -->
+  <div class="container mx-auto px-4 md:px-8 max-w-screen-xl pb-16">
+    <div class="max-w-xl">
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">{title}</h1>
+      <p class="text-xl opacity-80 mb-6">{subtitle}</p>
+      
+      <!-- Project Details Pills (conditionally rendered) -->
+      {(category || client || year) && (
+        <div class="flex flex-wrap gap-4 mt-8">
+          {category && (
+            <div class="bg-black/30 backdrop-blur-sm px-4 py-2 rounded-full">
+              <span class="text-sm font-medium">{category}</span>
+            </div>
+          )}
+          
+          {client && (
+            <div class="bg-black/30 backdrop-blur-sm px-4 py-2 rounded-full">
+              <span class="text-sm font-medium">Client: {client}</span>
+            </div>
+          )}
+          
+          {year && (
+            <div class="bg-black/30 backdrop-blur-sm px-4 py-2 rounded-full">
+              <span class="text-sm font-medium">Year: {year}</span>
+            </div>
+          )}
+        </div>
+      )}
+      
+      <!-- Filter Categories (if provided) -->
+      {filterCategories.length > 0 && (
+        <div class="mt-12">
+          <h2 class="text-2xl font-bold mb-6">Filter by Category</h2>
+          <div class="flex flex-wrap gap-4">
+            {filterCategories.map((category, index) => (
+              <button 
+                class="filter-btn py-2 px-6 text-base rounded border border-gray-200 hover:bg-gray-100 hover:text-black transition-all duration-300 data-[pressed=true]:bg-black data-[pressed=true]:text-white data-[pressed=true]:border-black" 
+                data-category={category}
+                data-pressed={index === 0 ? "true" : "false"}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  </div>
+</section>
+
+<script>
+  // Client-side filtering functionality (only runs if filter buttons exist)
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    
+    if (filterButtons.length > 0) {
+      filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const category = btn.getAttribute('data-category');
+          
+          // Update active state of buttons
+          filterButtons.forEach(button => {
+            button.setAttribute('data-pressed', 'false');
+          });
+          btn.setAttribute('data-pressed', 'true');
+          
+          // Dispatch a custom event for project filtering
+          window.dispatchEvent(new CustomEvent('filterProjects', {
+            detail: { category }
+          }));
+        });
+      });
+    }
+  });
+</script>

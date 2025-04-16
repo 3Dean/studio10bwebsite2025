@@ -86,7 +86,7 @@ yarn preview
 
 ## 📱 Pages
 
-- **Home** - Introduction to Studio hob with hero, featured project and grid of projects
+- **Home** - Introduction to Studio 10b with hero, featured project and grid of projects
 - **Projects** - Filterable grid of all projects
 - **Project Detail** - Detailed view of individual projects with gallery
 - **About** - Information about the studio and team

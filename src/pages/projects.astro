@@ -1,36 +1,36 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
-import Hero from '../components/Hero.astro';
+import Hero from '../components/HeroProjects.astro';
 
-// Sample project data
+// Hardcoded project data
 const projects = [
   {
     id: "1",
-    title: "Virtual Reality Museum",
-    category: "VR Experience",
+    title: "Virtual Marketing Experience",
+    category: "Marketing Environment",
     imageUrl: "/images/env-project-1.jpg",
-    slug: "vr-museum"
+    slug: "marketing-environment"
   },
   {
     id: "2",
     title: "Interactive Medical Training",
     category: "Education",
     imageUrl: "/images/env-project-2.jpg",
-    slug: "medical-training"
+    slug: "videogame-gallery"
   },
   {
     id: "3",
     title: "Architectural Visualization",
     category: "Visualization",
     imageUrl: "/images/env-project-3.jpg",
-    slug: "arch-visualization"
+    slug: "beach-party-environment"
   },
   {
     id: "4",
-    title: "Urban Planning Simulator",
+    title: "Fashion Show Environment",
     category: "Simulation",
     imageUrl: "/images/project-4.jpg",
-    slug: "urban-planning"
+    slug: "fashion-show"
   },
   {
     id: "5",
@@ -48,8 +48,8 @@ const projects = [
   }
 ];
 
-// Category filters
-const categories = ["All", "VR Experience", "Education", "Visualization", "Simulation", "Training"];
+// Extract unique categories for filtering
+const uniqueCategories = ['All', ...new Set(projects.map(project => project.category))];
 ---
 
 <MainLayout title="Projects - Studio 10b">
@@ -64,7 +64,7 @@ const categories = ["All", "VR Experience", "Education", "Visualization", "Simul
       <div class="mb-12">
         <h2 class="text-2xl font-bold mb-6">Filter by Category</h2>
         <div class="flex flex-wrap gap-4">
-          {categories.map(category => (
+          {uniqueCategories.map(category => (
             <button 
               class="filter-btn py-2 px-6 text-base rounded border border-gray-200 hover:bg-gray-100 transition-all duration-300 data-[pressed=true]:bg-black data-[pressed=true]:text-white data-[pressed=true]:border-black" 
               data-category={category}

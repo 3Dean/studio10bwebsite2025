@@ -1,5 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
+import mdx from '@astrojs/mdx';
 import tailwind from '@astrojs/tailwind';
 import logoAnimation from './src/integrations/astro-logo-animation.js';
 
@@ -8,7 +9,7 @@ export default defineConfig({
   site: 'https://studio10b.com',
   // Base path if deploying to a subdirectory
   // base: '/my-base-path',
-  integrations: [tailwind(), logoAnimation()],
+  integrations: [tailwind(), logoAnimation(), mdx()],
   outDir: './dist',
   publicDir: './public',
  

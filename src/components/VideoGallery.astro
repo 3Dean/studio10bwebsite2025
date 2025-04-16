@@ -1,0 +1,204 @@
+---
+import VideoPlayer from './VideoPlayer.astro';
+
+interface LocalVideo {
+  url: string;
+  thumbnail?: string;
+  title?: string;
+  description?: string;
+}
+
+interface Props {
+  videos: LocalVideo[];
+  title?: string;
+  description?: string;
+  columns?: 1 | 2 | 3 | 4;
+  aspectRatio?: '16:9' | '4:3' | '1:1';
+}
+
+const {
+  videos,
+  title = "Video Gallery",
+  description = "",
+  columns = 2,
+  aspectRatio = "16:9"
+} = Astro.props;
+
+const gridCols = {
+  1: "grid-cols-1",
+  2: "grid-cols-1 md:grid-cols-2",
+  3: "grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
+  4: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+};
+
+const getPaddingTop = () => {
+  switch (aspectRatio) {
+    case '16:9': return '56.25%';
+    case '4:3': return '75%';
+    case '1:1': return '100%';
+    default: return '56.25%';
+  }
+};
+
+const paddingTop = getPaddingTop();
+---
+
+<div class="video-gallery mb-16">
+  {title && (
+    <h3 class="text-2xl font-bold mb-4">{title}</h3>
+  )}
+  
+  {description && (
+    <p class="text-gray-600 mb-8">{description}</p>
+  )}
+  
+  <div class={`grid ${gridCols[columns]} gap-6`}>
+    {videos.map((video) => (
+      <div class="video-item">
+        <!-- Video Thumbnail with Play Button Overlay -->
+        <div class="video-wrapper relative w-full rounded-lg overflow-hidden bg-black shadow-lg cursor-pointer" style={`padding-top: ${paddingTop}`}>
+          <!-- Thumbnail -->
+          <img 
+            src={video.thumbnail || '/images/video-placeholder.jpg'} 
+            alt={video.title || 'Video thumbnail'} 
+            class="absolute top-0 left-0 w-full h-full object-cover"
+          />
+          
+          <!-- Play Button Overlay -->
+          <div class="play-button-overlay absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 transition-opacity duration-300 hover:bg-opacity-30">
+            <div class="play-button-circle w-16 h-16 bg-black bg-opacity-60 rounded-full flex items-center justify-center transition-transform duration-300 hover:scale-110">
+              <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="white">
+                <polygon points="5,3 19,12 5,21"></polygon>
+              </svg>
+            </div>
+          </div>
+          
+          <!-- Video Title (if provided) -->
+          {video.title && (
+            <div class="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent text-white">
+              <p class="text-sm font-medium">{video.title}</p>
+            </div>
+          )}
+        </div>
+        
+        <!-- Video Modal (Hidden by Default) -->
+        <div class="video-modal fixed inset-0 z-50 bg-black bg-opacity-90 items-center justify-center hidden">
+          <div class="video-modal-content relative w-full max-w-4xl mx-4">
+            <!-- Close Button -->
+            <button class="close-modal absolute -top-10 right-0 text-white bg-transparent border-none cursor-pointer">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+            
+            <!-- Video Player -->
+            <div class="video-container relative w-full" style={`padding-top: ${paddingTop}`}>
+              <video 
+                class="absolute top-0 left-0 w-full h-full" 
+                controls 
+                preload="metadata"
+              >
+                <source src={video.url} type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+            
+            <!-- Video Info -->
+            {(video.title || video.description) && (
+              <div class="video-info bg-white p-4">
+                {video.title && <h4 class="text-lg font-medium mb-2">{video.title}</h4>}
+                {video.description && <p class="text-gray-600">{video.description}</p>}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<script>
+  // Client-side script to handle video modals
+  document.addEventListener('DOMContentLoaded', () => {
+    // Get all video items
+    const videoItems = document.querySelectorAll('.video-item');
+    
+    videoItems.forEach(item => {
+      const thumbnailWrapper = item.querySelector('.video-wrapper');
+      const modal = item.querySelector('.video-modal');
+      const closeButton = modal?.querySelector('.close-modal');
+      const video = modal?.querySelector('video');
+      
+      // Open modal on thumbnail click
+      thumbnailWrapper?.addEventListener('click', () => {
+        if (modal) {
+          modal.classList.remove('hidden');
+          document.body.style.overflow = 'hidden'; // Prevent scrolling
+          
+          // Start playing the video
+          if (video) {
+            video.play();
+          }
+        }
+      });
+      
+      // Close modal on button click
+      closeButton?.addEventListener('click', () => {
+        if (modal) {
+          modal.classList.add('hidden');
+          document.body.style.overflow = ''; // Restore scrolling
+          
+          // Pause the video
+          if (video) {
+            video.pause();
+          }
+        }
+      });
+      
+      // Close modal on background click
+      modal?.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          modal.classList.add('hidden');
+          document.body.style.overflow = ''; // Restore scrolling
+          
+          // Pause the video
+          if (video) {
+            video.pause();
+          }
+        }
+      });
+      
+      // Close modal on ESC key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) {
+          modal.classList.add('hidden');
+          document.body.style.overflow = ''; // Restore scrolling
+          
+          // Pause the video
+          if (video) {
+            video.pause();
+          }
+        }
+      });
+    });
+  });
+</script>
+
+<style>
+  .video-wrapper {
+    position: relative;
+    height: 0;
+    overflow: hidden;
+  }
+  
+  .play-button-circle:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+  
+  .video-container {
+    position: relative;
+    height: 0;
+    overflow: hidden;
+  }
+</style>

@@ -1,0 +1,146 @@
+---
+interface Props {
+  videoUrl: string;
+  thumbnailUrl?: string;
+  title?: string;
+  description?: string;
+  autoplay?: boolean;
+  controls?: boolean;
+  loop?: boolean;
+  muted?: boolean;
+  aspectRatio?: '16:9' | '4:3' | '1:1' | 'custom';
+  customRatio?: string; // e.g. "56.25%" for 16:9
+}
+
+const {
+  videoUrl,
+  thumbnailUrl,
+  title = "",
+  description = "",
+  autoplay = false,
+  controls = true,
+  loop = false,
+  muted = true,
+  aspectRatio = '16:9',
+  customRatio = "56.25%" // Default is 16:9 (56.25%)
+} = Astro.props;
+
+// Calculate padding-top based on aspect ratio
+const getPaddingTop = () => {
+  switch (aspectRatio) {
+    case '16:9': return '56.25%';
+    case '4:3': return '75%';
+    case '1:1': return '100%';
+    case 'custom': return customRatio;
+    default: return '56.25%';
+  }
+};
+
+// Extract file extension to determine video type
+const fileExtension = videoUrl.split('.').pop()?.toLowerCase();
+const videoType = fileExtension === 'mp4' ? 'video/mp4' 
+               : fileExtension === 'webm' ? 'video/webm'
+               : fileExtension === 'ogg' ? 'video/ogg'
+               : 'video/mp4'; // default fallback
+
+// Generate a unique ID for this video player instance
+const videoId = `video-player-${Math.random().toString(36).substring(2, 10)}`;
+---
+
+<div class="video-player-container w-full mb-8">
+  <!-- Video Title (if provided) -->
+  {title && (
+    <h4 class="text-xl font-medium mb-3">{title}</h4>
+  )}
+  
+  <!-- Video Description (if provided) -->
+  {description && (
+    <p class="text-gray-600 mb-4">{description}</p>
+  )}
+  
+  <!-- Responsive Video Wrapper -->
+  <div class="video-wrapper relative w-full rounded-lg overflow-hidden bg-black shadow-lg" style={`padding-top: ${getPaddingTop()}`}>
+    <!-- Custom Play Button Overlay -->
+    <div id={`play-overlay-${videoId}`} class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 z-10 cursor-pointer transition-opacity duration-300">
+      <div class="play-button-circle w-20 h-20 bg-black bg-opacity-60 rounded-full flex items-center justify-center transition-transform duration-300 hover:scale-110">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="white">
+          <polygon points="5,3 19,12 5,21"></polygon>
+        </svg>
+      </div>
+    </div>
+    
+    <!-- The Video Element -->
+    <video 
+      id={videoId}
+      class="absolute top-0 left-0 w-full h-full object-cover"
+      poster={thumbnailUrl}
+      {controls}
+      {autoplay}
+      {loop}
+      {muted}
+      playsinline
+    >
+      <source src={videoUrl} type={videoType}>
+      Your browser does not support the video tag.
+    </video>
+  </div>
+  
+  <!-- Caption Area (if title provided) -->
+  {title && (
+    <div class="mt-3 text-sm text-gray-500">
+      {title}
+    </div>
+  )}
+</div>
+
+<script define:vars={{ videoId }}>
+  // Client-side script to handle custom play button
+  document.addEventListener('DOMContentLoaded', () => {
+    const video = document.getElementById(videoId);
+    const playOverlay = document.getElementById(`play-overlay-${videoId}`);
+    
+    if (video && playOverlay) {
+      // Click on overlay to play video
+      playOverlay.addEventListener('click', () => {
+        video.play();
+        playOverlay.style.opacity = '0';
+        
+        // Hide controls initially when playing from overlay
+        // Then show them after a short delay
+        if (video.hasAttribute('controls')) {
+          video.removeAttribute('controls');
+          setTimeout(() => {
+            video.setAttribute('controls', 'true');
+          }, 700);
+        }
+      });
+      
+      // Show overlay again when video is paused
+      video.addEventListener('pause', () => {
+        playOverlay.style.opacity = '1';
+      });
+      
+      // Hide overlay when video is playing
+      video.addEventListener('play', () => {
+        playOverlay.style.opacity = '0';
+      });
+      
+      // Show overlay if video ends
+      video.addEventListener('ended', () => {
+        playOverlay.style.opacity = '1';
+      });
+    }
+  });
+</script>
+
+<style>
+  .video-wrapper {
+    position: relative;
+    height: 0;
+    overflow: hidden;
+  }
+  
+  .play-button-circle:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+</style>

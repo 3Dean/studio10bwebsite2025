@@ -1,0 +1,112 @@
+---
+interface Props {
+  videoUrl: string;
+  thumbnailUrl?: string;
+  title?: string;
+  autoplay?: boolean;
+  controls?: boolean;
+  loop?: boolean;
+  muted?: boolean;
+  isExternal?: boolean; // Add this property to handle external URLs
+}
+
+const {
+  videoUrl,
+  thumbnailUrl,
+  title = "",
+  autoplay = false,
+  controls = true,
+  loop = false,
+  muted = true,
+  isExternal = false // Default to false
+} = Astro.props;
+
+// Extract file extension to determine video type
+const fileExtension = videoUrl.split('.').pop()?.toLowerCase();
+const videoType = fileExtension === 'mp4' ? 'video/mp4' 
+               : fileExtension === 'webm' ? 'video/webm'
+               : fileExtension === 'ogg' ? 'video/ogg'
+               : 'video/mp4'; // default fallback
+
+// For external URLs, use the URL directly
+const finalVideoUrl = isExternal ? videoUrl : videoUrl;
+---
+
+<div class="video-player-container w-full overflow-hidden rounded-lg shadow-md group relative hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+  <div class="video-wrapper relative w-full rounded-lg overflow-hidden bg-black">
+    <!-- Video element (hidden initially if thumbnail exists) -->
+    <video 
+      class="w-full h-auto"
+      poster={thumbnailUrl}
+      {controls}
+      {autoplay}
+      {loop}
+      {muted}
+      playsinline
+      preload="metadata"
+      style={thumbnailUrl ? "display: none;" : ""}
+    >
+      <source src={finalVideoUrl} type={videoType}>
+      Your browser does not support the video tag.
+    </video>
+    
+    <!-- Custom thumbnail and play button overlay -->
+    {thumbnailUrl && (
+      <div class="custom-thumbnail-container relative w-full h-0 pb-[56.25%]">
+        <img 
+          src={thumbnailUrl} 
+          alt={title || 'Video thumbnail'} 
+          class="absolute inset-0 w-full h-full object-cover group-hover:opacity-80 transition-opacity duration-300"
+        />
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div class="play-button-circle w-16 h-16 bg-black bg-opacity-60 rounded-full flex items-center justify-center transform group-hover:scale-110 transition-transform duration-300 hover:bg-opacity-80">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="white">
+              <polygon points="5,3 19,12 5,21"></polygon>
+            </svg>
+          </div>
+        </div>
+      </div>
+    )}
+  </div>
+  
+  <!-- Video Title with animated line under it -->
+  {title && (
+    <div class="video-info p-4 bg-white">
+      <h3 class="text-base font-medium relative pb-2 inline-block">
+        {title}
+        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-black group-hover:w-full transition-all duration-300"></span>
+      </h3>
+    </div>
+  )}
+</div>
+
+<script>
+  // Client-side interactivity for click-to-play functionality
+  document.addEventListener('DOMContentLoaded', () => {
+    const videoPlayers = document.querySelectorAll('.video-player-container');
+    
+    videoPlayers.forEach(player => {
+      const video = player.querySelector('video');
+      const thumbnailContainer = player.querySelector('.custom-thumbnail-container');
+      
+      // Only add click handlers if we have the necessary elements
+      if (video && thumbnailContainer) {
+        thumbnailContainer.addEventListener('click', () => {
+          // Hide thumbnail container
+          thumbnailContainer.style.display = 'none';
+          
+          // Show and play the video
+          video.style.display = 'block';
+          video.controls = true;
+          video.play();
+        });
+        
+        // Handle video end - show thumbnail again
+        video.addEventListener('ended', () => {
+          thumbnailContainer.style.display = 'block';
+          video.style.display = 'none';
+        });
+      }
+    });
+  });
+</script>

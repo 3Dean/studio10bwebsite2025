@@ -1,0 +1,69 @@
+---
+import VideoPlayer from './VideoPlayer.astro';
+import VideoEmbed from './VideoEmbed.astro';
+
+// Define types for different video formats
+interface LocalVideo {
+  url: string;
+  thumbnail?: string;
+  title?: string;
+  description?: string;
+  isExternal?: boolean; // Added to support external URLs like Amazon S3
+}
+
+interface EmbeddedVideo {
+  provider: 'youtube' | 'vimeo';
+  videoId: string;
+  title?: string;
+  description?: string;
+}
+
+interface Props {
+  video?: LocalVideo | EmbeddedVideo;
+  isEmbedded?: boolean;
+}
+
+const {
+  video,
+  isEmbedded = false
+} = Astro.props;
+
+// Check if we have a video to display
+const hasVideo = !!video;
+---
+
+<div class="project-media-section my-16">
+  <h2 class="text-3xl font-bold mb-8">Project Demo</h2>
+  
+  {hasVideo && !isEmbedded && (
+    <div class="video-container mb-8">
+      <VideoPlayer 
+        videoUrl={(video as LocalVideo).url}
+        thumbnailUrl={(video as LocalVideo).thumbnail}
+        title={(video as LocalVideo).title}
+        isExternal={(video as LocalVideo).isExternal}
+      />
+      {/* {(video as LocalVideo).title && 
+        <h3 class="text-lg font-medium mt-4 mb-2">{(video as LocalVideo).title}</h3>
+      }
+      {(video as LocalVideo).description && 
+        <p class="text-gray-600">{(video as LocalVideo).description}</p>
+      } */}
+    </div>
+  )}
+  
+  {hasVideo && isEmbedded && (
+    <div class="video-container mb-8">
+      <VideoEmbed 
+        videoId={(video as EmbeddedVideo).videoId}
+        provider={(video as EmbeddedVideo).provider}
+        title={(video as EmbeddedVideo).title}
+        description={(video as EmbeddedVideo).description}
+      />
+    </div>
+  )}
+  
+  {!hasVideo && (
+    <p class="text-gray-600">No video available for this project.</p>
+  )}
+</div>

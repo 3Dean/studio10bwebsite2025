@@ -3,12 +3,14 @@ interface Props {
   href: string;
   variant?: 'primary' | 'outline' | 'roundwhite';
   size?: 'small' | 'medium' | 'large';
+  openInNewTab?: boolean; // Simpler approach
 }
 
 const { 
   href, 
   variant = 'primary', 
-  size = 'medium'
+  size = 'medium',
+  openInNewTab = false // Default to same window
 } = Astro.props;
 
 const variantClasses = {
@@ -26,6 +28,6 @@ const sizeClasses = {
 const classes = `inline-block font-medium no-underline text-center rounded transition-all duration-300 ${variantClasses[variant]} ${sizeClasses[size]}`;
 ---
 
-<a href={href} class={classes}>
+<a href={href} class={classes} target={openInNewTab ? "_blank" : undefined} rel={openInNewTab ? "noopener noreferrer" : undefined}>
   <slot />
 </a>
