@@ -14,7 +14,7 @@ export default defineConfig({
   
   // Change from 'server' to 'static'
   output: 'static',
-  adapter: awsAmplify(),
+  //adapter: awsAmplify(),
   
   // Server options
   server: {
