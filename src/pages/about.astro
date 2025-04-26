@@ -1,63 +1,108 @@
 ---
-import MainLayout from '../layouts/MainLayout.astro';
-import Hero from '../components/HeroAbout.astro';
+import MainLayout from "../layouts/MainLayout.astro";
+import Hero from "../components/HeroAbout.astro";
 ---
 
 <MainLayout title="About Us - Studio 10b">
-  <Hero 
+  <Hero
     title="About Studio 10b"
     subtitle="Crafting Immersive Virtual Environments Since 2020"
-    backgroundImage="/images/about-bg.jpg"
+    backgroundImage="/images/headerimage_about.jpg"
   />
-  
+
   <section class="py-24">
     <div class="container mx-auto px-4 md:px-8 max-w-screen-xl">
       <div class="grid md:grid-cols-2 gap-16 mb-20">
         <div>
-          <h2 class="text-3xl md:text-4xl font-bold mb-6">Our Vision</h2>
-          <p class="text-lg mb-6 leading-relaxed">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-          
-          <p class="text-lg mb-6 leading-relaxed">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-          
-          <h2 class="text-3xl md:text-4xl font-bold mt-10 mb-6">Our Approach</h2>
-          <p class="text-lg leading-relaxed">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          <h2 class="text-3xl md:text-4xl font-bold mb-6">My Vision</h2>
+          <p class="text-lg mb-6 leading-relaxed">
+            I believe in the transformative power of immersive experiences. As a
+            3D artist, designer, and developer, my mission is to craft digital
+            worlds that invite people to dream, explore, and connect. I’m driven
+            by the idea that great design doesn’t just impress — it moves
+            people, builds stories, and shapes new realities. Whether it’s a
+            virtual gallery, a brand experience, or a digital cityscape, I’m
+            passionate about building environments where technology and
+            creativity meet, creating memorable moments that resonate.
+          </p>
+
+          <h2 class="text-3xl md:text-4xl font-bold mt-10 mb-6">My Approach</h2>
+          <p class="text-lg mb-6 leading-relaxed">
+            At the core of everything I create is a spirit of craftsmanship and
+            innovation. I blend artistic intuition with technical expertise —
+            from initial concept sketch to fully realized immersive world. Every
+            project starts with a strategic foundation and evolves through
+            hands-on 3D modeling, visual design, animation, and interactive
+            development.
+          </p>
+
+          <p class="text-lg mb-6 leading-relaxed">
+            With a background working for major brands like MetLife, Dove
+            Men+Care, and Heineken USA, and a deep love for pioneering VR and
+            Web3 technologies, I focus on solutions that are both beautiful and
+            built to perform. Collaboration, exploration, and attention to
+            detail define my process — because a great experience is never an
+            accident. It's intentionally, lovingly made.
+          </p>
         </div>
-        
+
         <div class="order-first md:order-last">
-          <img 
-            src="/images/about-team.jpg" 
-            alt="Studio 10b Team" 
+          <img
+            src="/images/me.jpg"
+            alt="Studio 10b Team"
             class="w-full h-auto rounded-lg shadow-2xl"
           />
         </div>
       </div>
-      
+
       <div class="pt-10 border-t border-gray-200">
-        <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center">Our Core Values</h2>
-        
+        <h2 class="text-3xl md:text-4xl font-bold mb-12 text-center">
+          My Core Values
+        </h2>
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <div class="bg-gray-50 rounded-lg p-8 text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-lg">
+          <div
+            class="bg-gray-50 rounded-lg p-8 text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-lg"
+          >
             <div class="text-5xl mb-4">🔮</div>
             <h3 class="text-xl font-semibold mb-4">Innovation</h3>
-            <p class="text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
+            <p class="text-gray-600">
+              Blending imagination with technology to craft bold, future-forward
+              experiences.
+            </p>
           </div>
-          
-          <div class="bg-gray-50 rounded-lg p-8 text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-lg">
+
+          <div
+            class="bg-gray-50 rounded-lg p-8 text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-lg"
+          >
             <div class="text-5xl mb-4">⚡</div>
             <h3 class="text-xl font-semibold mb-4">Performance</h3>
-            <p class="text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
+            <p class="text-gray-600">
+              Designing immersive worlds that are fast, fluid, and built to
+              inspire action.
+            </p>
           </div>
-          
-          <div class="bg-gray-50 rounded-lg p-8 text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-lg">
+
+          <div
+            class="bg-gray-50 rounded-lg p-8 text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-lg"
+          >
             <div class="text-5xl mb-4">🎨</div>
             <h3 class="text-xl font-semibold mb-4">Creativity</h3>
-            <p class="text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
+            <p class="text-gray-600">
+              Fueling every project with originality, curiosity, and true
+              craftsmanship.
+            </p>
           </div>
-          
-          <div class="bg-gray-50 rounded-lg p-8 text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-lg">
+
+          <div
+            class="bg-gray-50 rounded-lg p-8 text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-lg"
+          >
             <div class="text-5xl mb-4">🚀</div>
             <h3 class="text-xl font-semibold mb-4">Exploration</h3>
-            <p class="text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</p>
+            <p class="text-gray-600">
+              Pushing boundaries through experimentation, discovery, and
+              fearless creation.
+            </p>
           </div>
         </div>
       </div>
