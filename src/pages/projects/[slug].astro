@@ -218,6 +218,9 @@ const { project } = Astro.props;
 // Determine if we have a video to display and what type
 const hasLocalVideo = !!project.video;
 const hasEmbeddedVideo = !!project.embeddedVideo;
+const hasViewableProjectUrl =
+  !!project.projectUrl &&
+  !project.projectUrl.toLowerCase().includes('nearhub.club');
 ---
 
 <MainLayout title={`${project.title} - Studio 10b`}>
@@ -332,7 +335,7 @@ const hasEmbeddedVideo = !!project.embeddedVideo;
             </div>
             
             <div class="mt-8 flex flex-col gap-4">
-              {project.projectUrl ? (
+              {hasViewableProjectUrl ? (
                 <Button href={project.projectUrl} variant="outline" openInNewTab={true}>
                   View Project
                 </Button>
