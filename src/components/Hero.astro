@@ -20,9 +20,10 @@ const {
 } = Astro.props;
 ---
 
-<section id="hero-container" class="relative h-screen min-h-[700px] text-white flex items-center" data-skybox-url={skyboxUrl}>
+<section id="hero-container" class="relative isolate h-screen min-h-[700px] overflow-hidden text-white flex items-center" data-skybox-url={skyboxUrl}>
   <!-- Three.js container with higher z-index than previously -->
-  <div id="skybox-container" class="absolute inset-0 z-5"></div>
+  <div id="skybox-container" class="absolute inset-0 z-0"></div>
+  <div class="absolute inset-0 z-10 bg-gradient-to-b from-black/45 via-black/15 to-black/55 pointer-events-none"></div>
   
   <!-- Content container - apply pointer-events-none to text only -->
   <div class="container relative z-20 mx-auto px-4 md:px-8 max-w-screen-xl">
@@ -87,6 +88,8 @@ const {
     });
     renderer.setSize(width, height);
     renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.NoToneMapping;
     
     // CRUCIAL: Reset any container styles that might interfere
     container.style.position = 'absolute';
@@ -148,6 +151,7 @@ const {
       skyboxUrl,
       (texture) => {
         console.log("Texture loaded successfully");
+        texture.colorSpace = THREE.SRGBColorSpace;
         texture.mapping = THREE.EquirectangularReflectionMapping;
         scene.background = texture;
       },
