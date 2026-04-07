@@ -51,9 +51,8 @@ const {
 </section>
 
 <script>
-  // Import ES modules directly - Vite will handle these
-  import * as THREE from 'https://cdn.skypack.dev/three@0.136.0';
-  import { OrbitControls } from 'https://cdn.skypack.dev/three@0.136.0/examples/jsm/controls/OrbitControls.js';
+  import * as THREE from 'three';
+  import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
   // Initialize skybox with OrbitControls
   const initSkybox = () => {
@@ -161,7 +160,7 @@ const {
     );
     
     // Add test cube to make rotation more obvious
-    const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
+    /*const geometry = new THREE.BoxGeometry(0.5, 0.5, 0.5);
     const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
     const cube = new THREE.Mesh(geometry, material);
     cube.position.set(0, 0, -5); // Position in front of camera
@@ -170,7 +169,7 @@ const {
     // Add ambient light so the cube is visible
     const light = new THREE.AmbientLight(0xffffff, 1);
     scene.add(light);
-    
+    */
     // Window resize handler
     function handleResize() {
       const newWidth = container.clientWidth;
