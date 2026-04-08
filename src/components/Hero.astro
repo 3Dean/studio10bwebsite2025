@@ -8,6 +8,7 @@ interface Props {
   ctaLink?: string;
   ctaTarget?: string; // Added target parameter for scroll target
   skyboxUrl?: string;
+  mobileSkyboxUrl?: string;
 }
 
 const {
@@ -16,11 +17,17 @@ const {
   ctaText = "View Projects",
   ctaLink = "#featured-project", // Changed default to anchor link
   ctaTarget = "featured-project", // Added default target ID
-  skyboxUrl = "/images/skybox.jpg"
+  skyboxUrl = "/images/skybox4k.jpg",
+  mobileSkyboxUrl = "/images/skybox2k.jpg"
 } = Astro.props;
 ---
 
-<section id="hero-container" class="relative isolate h-screen min-h-[700px] overflow-hidden text-white flex items-center" data-skybox-url={skyboxUrl}>
+<section
+  id="hero-container"
+  class="relative isolate h-screen min-h-[700px] overflow-hidden text-white flex items-center"
+  data-skybox-url={skyboxUrl}
+  data-skybox-mobile-url={mobileSkyboxUrl}
+>
   <!-- Three.js container with higher z-index than previously -->
   <div id="skybox-container" class="absolute inset-0 z-0"></div>
   <div class="absolute inset-0 z-10 bg-gradient-to-b from-black/45 via-black/15 to-black/55 pointer-events-none"></div>
@@ -68,8 +75,11 @@ const {
       return;
     }
     
-    // Get skybox URL from data attribute
-    const skyboxUrl = heroContainer.getAttribute('data-skybox-url') || "/images/skybox.jpg";
+    // Use a lighter panorama on smaller touch devices.
+    const desktopSkyboxUrl = heroContainer.getAttribute('data-skybox-url') || "/images/skybox4k.jpg";
+    const mobileSkyboxUrl = heroContainer.getAttribute('data-skybox-mobile-url') || "/images/skybox2k.jpg";
+    const isMobileViewport = window.matchMedia('(max-width: 767px), (pointer: coarse)').matches;
+    const skyboxUrl = isMobileViewport ? mobileSkyboxUrl : desktopSkyboxUrl;
     console.log("Using skybox URL:", skyboxUrl);
 
     // Set up scene
