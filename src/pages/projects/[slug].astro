@@ -242,7 +242,35 @@ export async function getStaticPaths() {
 }
 
 // Receive project data as props
-const { project } = Astro.props;
+type EmbeddedVideo = {
+  url: string;
+  thumbnail?: string;
+  title?: string;
+  description?: string;
+};
+
+type ProjectData = {
+  title: string;
+  category: string;
+  client: string;
+  year: string;
+  projectUrl: string;
+  description: string;
+  challenge: string;
+  solution: string;
+  features: string[];
+  mainImage: string;
+  galleryImages: string[];
+  video?: {
+    url: string;
+    thumbnail: string;
+    title: string;
+    description: string;
+  };
+  embeddedVideo?: EmbeddedVideo;
+};
+
+const { project } = Astro.props as { project: ProjectData };
 
 // Determine if we have a video to display and what type
 const hasLocalVideo = !!project.video;
