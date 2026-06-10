@@ -45,7 +45,6 @@ const videoType = fileExtension === 'mp4' ? 'video/mp4'
 
 // Generate a unique ID for this video player instance
 const videoId = `video-player-${Math.random().toString(36).substring(2, 10)}`;
-const crossOrigin = /^https?:\/\//i.test(videoUrl) ? 'anonymous' : undefined;
 ---
 
 <div class="video-player-container w-full mb-8">
@@ -80,7 +79,6 @@ const crossOrigin = /^https?:\/\//i.test(videoUrl) ? 'anonymous' : undefined;
       {loop}
       {muted}
       playsinline
-      crossorigin={crossOrigin}
     >
       <source src={videoUrl} type={videoType}>
       Your browser does not support the video tag.

@@ -30,7 +30,6 @@ const videoType = fileExtension === 'mp4' ? 'video/mp4'
 
 // For external URLs, use the URL directly
 const finalVideoUrl = isExternal ? videoUrl : videoUrl;
-const crossOrigin = /^https?:\/\//i.test(finalVideoUrl) ? 'anonymous' : undefined;
 ---
 
 <div class="video-player-container w-full overflow-hidden rounded-lg shadow-md group relative hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
@@ -44,7 +43,6 @@ const crossOrigin = /^https?:\/\//i.test(finalVideoUrl) ? 'anonymous' : undefine
       {loop}
       {muted}
       playsinline
-      crossorigin={crossOrigin}
       preload="metadata"
       style={thumbnailUrl ? "display: none;" : ""}
     >
