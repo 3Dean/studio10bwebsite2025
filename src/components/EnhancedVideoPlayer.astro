@@ -45,6 +45,7 @@ const videoType = fileExtension === 'mp4' ? 'video/mp4'
 
 // Generate a unique ID for this video player instance
 const videoId = `video-player-${Math.random().toString(36).substring(2, 10)}`;
+const crossOrigin = /^https?:\/\//i.test(videoUrl) ? 'anonymous' : undefined;
 ---
 
 <div class="video-player-container w-full mb-8">
@@ -79,10 +80,15 @@ const videoId = `video-player-${Math.random().toString(36).substring(2, 10)}`;
       {loop}
       {muted}
       playsinline
+      crossorigin={crossOrigin}
     >
       <source src={videoUrl} type={videoType}>
       Your browser does not support the video tag.
     </video>
+
+    <div id={`status-${videoId}`} class="absolute inset-x-4 bottom-4 hidden rounded-md bg-black/75 px-4 py-3 text-sm text-white z-20">
+      This video could not be loaded.
+    </div>
   </div>
   
   <!-- Caption Area (if title provided) -->
@@ -98,12 +104,30 @@ const videoId = `video-player-${Math.random().toString(36).substring(2, 10)}`;
   document.addEventListener('DOMContentLoaded', () => {
     const video = document.getElementById(videoId);
     const playOverlay = document.getElementById(`play-overlay-${videoId}`);
+    const statusMessage = document.getElementById(`status-${videoId}`);
+
+    const showError = (message) => {
+      if (!statusMessage) return;
+      statusMessage.textContent = message;
+      statusMessage.classList.remove('hidden');
+    };
+
+    const clearError = () => {
+      if (!statusMessage) return;
+      statusMessage.classList.add('hidden');
+    };
     
     if (video && playOverlay) {
       // Click on overlay to play video
       playOverlay.addEventListener('click', () => {
-        video.play();
+        const playAttempt = video.play();
         playOverlay.style.opacity = '0';
+        if (playAttempt && typeof playAttempt.catch === 'function') {
+          playAttempt.catch(() => {
+            playOverlay.style.opacity = '1';
+            showError('Playback was blocked or the file could not be loaded.');
+          });
+        }
         
         // Hide controls initially when playing from overlay
         // Then show them after a short delay
@@ -123,11 +147,21 @@ const videoId = `video-player-${Math.random().toString(36).substring(2, 10)}`;
       // Hide overlay when video is playing
       video.addEventListener('play', () => {
         playOverlay.style.opacity = '0';
+        clearError();
       });
       
       // Show overlay if video ends
       video.addEventListener('ended', () => {
         playOverlay.style.opacity = '1';
+      });
+
+      video.addEventListener('error', () => {
+        playOverlay.style.opacity = '1';
+        showError('This video could not be loaded. Verify that the file URL is public and returns 200.');
+      });
+
+      video.addEventListener('loadeddata', () => {
+        clearError();
       });
     }
   });

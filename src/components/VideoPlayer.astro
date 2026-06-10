@@ -30,6 +30,7 @@ const videoType = fileExtension === 'mp4' ? 'video/mp4'
 
 // For external URLs, use the URL directly
 const finalVideoUrl = isExternal ? videoUrl : videoUrl;
+const crossOrigin = /^https?:\/\//i.test(finalVideoUrl) ? 'anonymous' : undefined;
 ---
 
 <div class="video-player-container w-full overflow-hidden rounded-lg shadow-md group relative hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
@@ -43,12 +44,17 @@ const finalVideoUrl = isExternal ? videoUrl : videoUrl;
       {loop}
       {muted}
       playsinline
+      crossorigin={crossOrigin}
       preload="metadata"
       style={thumbnailUrl ? "display: none;" : ""}
     >
       <source src={finalVideoUrl} type={videoType}>
       Your browser does not support the video tag.
     </video>
+
+    <div class="video-status-message hidden absolute inset-x-4 bottom-4 z-20 rounded-md bg-black/75 px-4 py-3 text-sm text-white">
+      This video could not be loaded.
+    </div>
     
     <!-- Custom thumbnail and play button overlay -->
     {thumbnailUrl && (
@@ -88,9 +94,33 @@ const finalVideoUrl = isExternal ? videoUrl : videoUrl;
     videoPlayers.forEach(player => {
       const video = player.querySelector('video');
       const thumbnailContainer = player.querySelector('.custom-thumbnail-container');
+      const statusMessage = player.querySelector('.video-status-message');
+
+      const showError = (message) => {
+        if (!statusMessage) return;
+        statusMessage.textContent = message;
+        statusMessage.classList.remove('hidden');
+      };
+
+      const clearError = () => {
+        if (!statusMessage) return;
+        statusMessage.classList.add('hidden');
+      };
       
+      if (!video) {
+        return;
+      }
+
+      video.addEventListener('error', () => {
+        showError('This video could not be loaded. Verify that the file URL is public and returns 200.');
+      });
+
+      video.addEventListener('loadeddata', () => {
+        clearError();
+      });
+
       // Only add click handlers if we have the necessary elements
-      if (video && thumbnailContainer) {
+      if (thumbnailContainer) {
         thumbnailContainer.addEventListener('click', () => {
           // Hide thumbnail container
           thumbnailContainer.style.display = 'none';
@@ -98,7 +128,14 @@ const finalVideoUrl = isExternal ? videoUrl : videoUrl;
           // Show and play the video
           video.style.display = 'block';
           video.controls = true;
-          video.play();
+          const playAttempt = video.play();
+          if (playAttempt && typeof playAttempt.catch === 'function') {
+            playAttempt.catch(() => {
+              thumbnailContainer.style.display = 'block';
+              video.style.display = 'none';
+              showError('Playback was blocked or the file could not be loaded.');
+            });
+          }
         });
         
         // Handle video end - show thumbnail again
