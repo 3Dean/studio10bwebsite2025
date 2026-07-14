@@ -7,6 +7,43 @@ import ProjectMediaSection from '../../components/ProjectMediaSection.astro';
 export async function getStaticPaths() {
   // Define project data directly in getStaticPaths
   const projectData = {
+    'art-gallery': {
+      title: "Art Gallery",
+      category: "Gallery",
+      client: "Self-Promotional",
+      year: "2026",
+      projectUrl: "https://feature-gallerythree-avatar-reset.d1fnty6c47bczd.amplifyapp.com/",
+      description: "This project explores a new way of experiencing art on the web by combining the familiarity of a modern website with the immersion of a lightweight 3D environment. Rather than asking visitors to navigate a game-like space, the gallery is designed to feel intuitive and welcoming, allowing artwork to become the primary focus.",
+      details: "Built with Three.js, the experience presents original acrylic paintings inside a modular architectural gallery that is optimized for desktop and mobile browsers. Each interaction—from scrolling through collections to selecting individual paintings—has been designed to feel natural while preserving the emotional impact of viewing artwork in a physical exhibition. Although the project began as a personal online gallery, it has evolved into the foundation for a scalable platform where artists, photographers, and musicians can create their own immersive galleries without requiring 3D expertise.",
+      challenge: "Traditional virtual galleries often feel more like video games than art experiences. First-person controls, complex navigation, and heavy 3D environments can create unnecessary friction for visitors who simply want to discover artwork. The challenge became finding a way to preserve the sense of space and atmosphere that only 3D can provide while making the experience as approachable as browsing a beautifully designed website. At the same time, the platform needed to remain lightweight, performant, mobile-friendly, and flexible enough to support future commerce, artist storytelling, and multiple collections.",
+      solution: "The solution was to rethink the gallery as a website with a three-dimensional presentation layer rather than a traditional virtual world. A reusable gallery environment became the foundation of the experience, allowing artwork, metadata, lighting, and collections to change independently of the architecture itself. Navigation experiments gradually shifted away from conventional first-person movement toward scroll-driven cinematic transitions, creating an experience that feels familiar, elegant, and accessible. Artwork information is driven by structured metadata, making it possible to connect each piece to artist stories, pricing, availability, and future e-commerce integrations while keeping the rendering engine independent of the content. This architecture creates a sustainable foundation for future features including artist subscriptions, curated exhibitions, virtual events, multiplayer presence, and integrated artwork sales.",
+      features: [
+        "Lightweight Three.js architecture optimized for fast loading",
+        "Modular gallery design built from reusable environments",
+        "Responsive desktop and mobile experience",
+        "Scroll-driven cinematic navigation between gallery spaces",
+        "Interactive artwork selection with detailed information panels",
+        "Metadata-driven artwork management for easy content updates",
+        "Dynamic artwork placement using Blender anchor points",
+        "Animated environmental elements for atmosphere without sacrificing performance",
+        "Architecture designed for future e-commerce integration",
+        "Scalable foundation for multi-artist galleries, photography portfolios, and music experiences"
+      ],
+      mainImage: "/images/env-project-17.jpg",
+      galleryImages: [
+        "/images/env-project-17-gallery-1.jpg",
+        "/images/env-project-17-gallery-2.jpg",
+        "/images/env-project-17-gallery-3.jpg",
+        "/images/env-project-17-gallery-4.jpg",
+        "/images/env-project-17-gallery-5.jpg"
+      ],
+      video: {
+        url: "https://musicenvironment.s3.us-east-1.amazonaws.com/project-17.mp4",
+        thumbnail: "/images/env-project-17-thumbnail.jpg",
+        title: "Art Gallery Walkthrough",
+        description: "Take a tour through our virtual art gallery showcasing original acrylic paintings"
+      }
+    },
     'music-gallery': {
       title: "Music Space for Independent Artists",
       category: "Music Gallery",
