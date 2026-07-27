@@ -1,0 +1,25 @@
+---
+interface Props {
+  title?: string;
+}
+
+const { title = 'Process note' } = Astro.props;
+---
+
+<aside class="my-10 rounded-xl border border-gray-200 bg-gray-50 p-6 md:p-8">
+  <p class="mb-3 text-sm font-bold uppercase tracking-[0.16em] text-gray-500">
+    {title}
+  </p>
+  <div class="process-callout-content">
+    <slot />
+  </div>
+</aside>
+
+<style>
+  .process-callout-content :global(p) {
+    margin: 0;
+    color: #222;
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+</style>

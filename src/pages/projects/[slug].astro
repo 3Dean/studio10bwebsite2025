@@ -13,6 +13,7 @@ export async function getStaticPaths() {
       client: "Self-Promotional",
       year: "2026",
       projectUrl: "https://www.paintedpaths.studio",
+      processPath: "/projects/art-gallery/process",
       description: "This project explores a new way of experiencing art on the web by combining the familiarity of a modern website with the immersion of a lightweight 3D environment. Rather than asking visitors to navigate a game-like space, the gallery is designed to feel intuitive and welcoming, allowing artwork to become the primary focus.",
       details: "Built with Three.js, the experience presents original acrylic paintings inside a modular architectural gallery that is optimized for desktop and mobile browsers. Each interaction—from scrolling through collections to selecting individual paintings—has been designed to feel natural while preserving the emotional impact of viewing artwork in a physical exhibition. Although the project began as a personal online gallery, it has evolved into the foundation for a scalable platform where artists, photographers, and musicians can create their own immersive galleries without requiring 3D expertise.",
       challenge: "Traditional virtual galleries often feel more like video games than art experiences. First-person controls, complex navigation, and heavy 3D environments can create unnecessary friction for visitors who simply want to discover artwork. The challenge became finding a way to preserve the sense of space and atmosphere that only 3D can provide while making the experience as approachable as browsing a beautifully designed website. At the same time, the platform needed to remain lightweight, performant, mobile-friendly, and flexible enough to support future commerce, artist storytelling, and multiple collections.",
@@ -340,6 +341,7 @@ type ProjectData = {
   client: string;
   year: string;
   projectUrl: string;
+  processPath?: string;
   description: string;
   challenge: string;
   solution: string;
@@ -365,7 +367,11 @@ const hasViewableProjectUrl =
   !project.projectUrl.toLowerCase().includes('nearhub.club');
 ---
 
-<MainLayout title={`${project.title} - Studio 10b`}>
+<MainLayout
+  title={`${project.title} - Studio 10b`}
+  description={project.description}
+  ogImage={project.mainImage}
+>
   <!-- Hero Section -->
   <section class="relative h-[70vh] min-h-[600px] flex items-end text-white">
     <div class="absolute inset-0 -z-10">
@@ -484,6 +490,11 @@ const hasViewableProjectUrl =
               ) : (
                 <Button href="/contact" variant="outline">
                   Request Demo
+                </Button>
+              )}
+              {project.processPath && (
+                <Button href={project.processPath} variant="outline">
+                  View the Process
                 </Button>
               )}
               <Button href="/contact" variant="primary">

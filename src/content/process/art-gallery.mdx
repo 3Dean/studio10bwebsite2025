@@ -1,0 +1,213 @@
+---
+title: "Building an Immersive Art Gallery for the Web"
+projectTitle: "Art Gallery"
+projectSlug: "art-gallery"
+summary: "From an early pencil sketch to connected 2D and 3D exhibitions, this is the design and development journey behind Painted Paths."
+description: "A behind-the-scenes look at the navigation experiments, Blender production, Three.js architecture, accessibility decisions, and commercial systems behind Painted Paths."
+publishedDate: "2026-07-27"
+stage: "Ongoing"
+coverImage: "/images/env-project-17.jpg"
+coverImageAlt: "The Painted Paths virtual art gallery displayed in a web browser"
+projectUrl: "https://www.paintedpaths.studio"
+---
+
+import ProcessImage from '../../components/ProcessImage.astro';
+import ProcessGallery from '../../components/ProcessGallery.astro';
+import ProcessCallout from '../../components/ProcessCallout.astro';
+import ProcessTimeline from '../../components/ProcessTimeline.astro';
+
+Painted Paths began with a simple question: could an online art gallery retain the atmosphere of a physical exhibition without making visitors learn how to navigate a video game?
+
+The project started on July 3, 2026, as a Three.js, Vite, and TypeScript prototype built around a custom GLB environment. The original roadmap was ambitious: first-person exploration, interactive artwork sales, VR, avatars, multiplayer communication, user preferences, and ambient music. The work that followed was less about checking off that list and more about discovering which ideas supported the art—and which ones got in its way.
+
+<ProcessTimeline
+  items={[
+    {
+      date: 'July 3–4',
+      title: 'Foundation and first experiments',
+      description: 'The Three.js scaffold, first gallery model, orbit controls, click-to-focus artwork, and stacked-room navigation established the initial interaction questions.'
+    },
+    {
+      date: 'July 9–10',
+      title: 'An authored horizontal exhibition',
+      description: 'Blender anchor slots replaced manual coordinates, and a new three-module horizontal gallery replaced the earlier vertical stack.'
+    },
+    {
+      date: 'July 11–17',
+      title: 'Guided viewing and explicit mappings',
+      description: 'Artwork metadata, scroll touring, mobile controls, clone-aware waypoints, and a mapping table separated display location from camera order.'
+    },
+    {
+      date: 'July 18–21',
+      title: 'A complete visitor and commerce experience',
+      description: 'About, Contact, consent-based music, editorial artwork panels, original and commission inquiries, print sales, and environmental motion moved into the gallery.'
+    },
+    {
+      date: 'July 24',
+      title: 'Connected 2D and 3D galleries',
+      description: 'The site split into a lightweight selector, an accessible editorial collection, and an isolated immersive experience with direct artwork links between them.'
+    }
+  ]}
+/>
+
+## Establishing the experience
+
+The earliest concept focused on the relationship between the visitor, the architecture, and a single work of art. A quick drawing was enough to establish the essential composition: a framed view, a central focal point, and a path that guides the visitor forward.
+
+<ProcessImage
+  src="/images/env-project-17-gallery-6.jpg"
+  alt="Early pencil concept sketch showing a visitor approaching artwork in a gallery"
+  caption="An early concept sketch exploring scale, framing, and the visitor's approach to the artwork."
+/>
+
+The sketch also helped define what the experience should avoid. The project began with orbit controls, fixed eye-height cameras, simplified look controls, first-person movement, and wheel-driven travel through vertically stacked gallery rooms. Each prototype answered a useful question, but the stacked architecture felt abstract and the unrestricted controls placed too much attention on operating the camera.
+
+<ProcessCallout title="Core design principle">
+  Painted Paths should behave like a thoughtfully designed website first. Three-dimensional space should enrich the presentation without becoming a barrier to the artwork.
+</ProcessCallout>
+
+That principle did not eliminate exploration. It changed the balance between freedom and authorship. Visitors can still move through the gallery, but important views and artwork sequences are composed deliberately rather than left entirely to chance.
+
+## Pivoting from stacked rooms to a curated exhibition
+
+The largest spatial change arrived with a new gallery model. Three instances of `GalleryThree_001.glb` were arranged horizontally and finished with left and right wall-end models. This replaced the earlier stack with a believable architectural run and restored the feeling of walking through an exhibition.
+
+<ProcessGallery
+  images={[
+    {
+      src: '/images/env-project-17-gallery-1.jpg',
+      alt: 'Interior view of the virtual gallery with artwork arranged on the walls',
+      caption: 'The horizontal layout creates a continuous architectural path.'
+    },
+    {
+      src: '/images/env-project-17-gallery-2.jpg',
+      alt: 'A second interior space in the Painted Paths virtual gallery',
+      caption: 'Sightlines, lighting, and artwork placement are curated together.'
+    }
+  ]}
+/>
+
+The horizontal gallery also exposed a new problem: repeated architecture does not imply repeated curation. Numbering artworks, choosing their wall positions, and deciding the order in which visitors should see them are three different concerns. Treating them as one system produced brittle rules and an unstable final tour stop.
+
+The eventual solution was an explicit exhibition mapping. Each of the thirteen paintings has its own display slot, gallery instance, camera pose, and guided order. The number of gallery clones is derived from that mapping rather than fixed in code. Visual placement can now create a strong opening composition while the camera follows a separate horseshoe-shaped tour.
+
+## Authoring placement and camera intent in Blender
+
+Manual world coordinates were replaced with named Blender empties such as `art_slot_01`. At runtime, Three.js finds those anchors and attaches artwork models to them. The source model—not a collection of unexplained coordinates in application code—defines where a work belongs.
+
+The same approach expanded to camera composition. Each cloned module carries authored waypoint and look-target nodes. About and Contact share a dedicated scene destination defined by `waypoint_about` and `look_about`, while each exhibition module provides its own reusable viewing poses.
+
+<ProcessCallout title="Technical decision">
+  Blender defines spatial intent; structured metadata defines content and business information; an explicit mapping connects each work to its display slot, camera pose, and tour order.
+</ProcessCallout>
+
+This distinction became essential once gallery modules were cloned. Runtime code could no longer infer the intended exhibition path reliably from artwork numbers or world positions. Following authored nodes and explicit mappings proved clearer than asking the application to rediscover the curatorial plan.
+
+## Separating artwork from presentation
+
+Artwork data moved into a structured source containing title, medium, dimensions, price, availability, story, thumbnails, and action links. The same record can populate a 3D detail panel, a conventional gallery card, a direct link, or an inquiry form without duplicating the underlying content.
+
+The artwork panel evolved from a compact overlay into a responsive editorial card with a thumbnail, specifications, story content, and distinct actions for originals, prints, and commissions. Interaction state remains connected to the selected artwork, so even a short inquiry carries useful context such as artwork ID, title, price, inquiry type, and source.
+
+This separation also allowed different content types to coexist safely. A “Let's Path!” T-shirt appears as the fourteenth guided 3D display, but its merchandise metadata and Etsy action remain separate from the thirteen-painting catalog. Product language does not leak into original-art or commission workflows.
+
+## Refining navigation for desktop and mobile
+
+Scroll-wheel touring initially appeared simple: step between artworks and point the camera at each one. In practice it required wheel gating, cooldown handling, shortest-path yaw interpolation, and clone-aware targets to prevent overshoot and camera flips.
+
+Mobile required a more fundamental product decision. Touch look and movement were useful for exploration, but asking visitors to walk and frame every painting on a small screen was not an effective default. A guided artwork browser was introduced with Previous, Next, and Explore controls, a visible artwork title, and calmer touch sensitivity.
+
+<ProcessGallery
+  images={[
+    {
+      src: '/images/env-project-17-gallery-7.jpg',
+      alt: 'Composed camera view inside the immersive art gallery',
+      caption: 'Authored viewpoints introduce each work with a consistent composition.'
+    },
+    {
+      src: '/images/env-project-17-gallery-3.jpg',
+      alt: 'Artwork information displayed within the virtual gallery experience',
+      caption: 'Responsive editorial panels keep the selected artwork in context.'
+    },
+    {
+      src: '/images/env-project-17-gallery-9.jpg',
+      alt: 'Atmospheric view of the completed Painted Paths gallery',
+      caption: 'The environment remains available for visitors who choose free exploration.'
+    }
+  ]}
+  columns={3}
+/>
+
+Guided viewing and free exploration are now separate modes rather than competing behaviors. That distinction preserves the composed exhibition path while still allowing visitors to move through the architecture on their own.
+
+## Treating interface and 3D controls as separate systems
+
+As About, Contact, artwork inquiries, and commerce entered the experience, input ownership became critical. A visitor typing into the contact form should not move the camera. Someone scrolling an information panel should not advance the artwork tour.
+
+Three.js keyboard, mouse, wheel, selection, and touch controls are suspended while content overlays are opening or active. Normal browser interaction remains available for typing, tabbing, following links, scrolling, and submitting forms. Content appears only after the authored camera move completes, making the transition feel intentional.
+
+Ambient music follows the same visitor-first approach. The SOMA FM Lush stream is opt-in, begins only from the Enter Gallery gesture, uses no audio preload, and is never saved as a default preference. Playback can continue through the Gallery, About, and Contact sections, but stream failure never blocks entry or navigation.
+
+## Building real commerce paths
+
+The first sales actions were placeholders. They eventually became two complementary systems:
+
+- Original purchases and commission requests open focused Formspree inquiry states without losing the selected artwork.
+- Print purchases continue to Etsy, with Gelato handling print-on-demand production and fulfillment.
+- Purchase and commission drafts stay separate and survive a temporary return to artwork details.
+- Keyboard focus moves into each form and returns to the action that opened it.
+- Successful original-art inquiries clarify that contacting the artist does not reserve or complete a sale.
+
+This approach matches the products being offered. Prints can use a conventional storefront, while originals and commissions benefit from a direct conversation before payment, shipping, or availability is finalized.
+
+## Creating a meaningful 2D and 3D choice
+
+The most significant architectural decision came after the immersive experience was already working. Adding a “2D or 3D?” overlay inside the Three.js application would have looked like a choice, but the browser would already be downloading WebGL code and gallery models. It would not help visitors on limited bandwidth, older hardware, unreliable Wi-Fi, or assistive technology.
+
+The site was therefore split into three independently built entry points:
+
+1. `/` is a lightweight experience selector with no JavaScript.
+2. `/gallery/` is a responsive editorial collection that does not request Three.js or GLB models.
+3. `/experience/` contains the immersive gallery and loads its assets only after the visitor chooses it.
+
+<ProcessCallout title="Product pivot">
+  The 2D gallery is not a fallback or an error state. It is a complete, accessible, search-friendly, and commerce-ready way to experience the same collection.
+</ProcessCallout>
+
+All thirteen paintings appear in the 2D collection with availability filters, lazy-loaded images, keyboard-accessible dialogs, reduced-motion handling, artwork stories, and the same inquiry and purchase paths as the immersive gallery.
+
+The two presentations are connected at the artwork level. A URL such as `/gallery/?artwork=artwork013` opens a specific 2D detail. Its matching `/experience/#artwork013` link carries that identity into the 3D experience, introduces the selected work on the welcome screen, waits safely for the scene to load, travels to the correct cloned-gallery waypoint, and opens the artwork panel on arrival.
+
+This route split clarified the role of each layer: shared metadata owns the artwork; the 2D experience owns conventional editorial presentation; and the 3D experience owns placement, camera movement, and models.
+
+## Adding atmosphere without a heavy lighting system
+
+The gallery uses baked materials rather than beginning with an expensive dynamic-lighting setup. Atmosphere is created through a small number of focused systems:
+
+- A scaled skydome with slowly scrolling cloud UVs
+- Procedural breeze animation derived from the authored planter hierarchy
+- Localized dust volumes beneath each gallery skylight
+
+The dust system follows the same authored-scene philosophy as the artwork. Blender nodes define the top and bottom of each skylight shaft. Every gallery clone inherits those anchors, and one GPU point cloud creates slow drift, shimmer, and edge fading inside the defined volume.
+
+Rather than simulating full volumetric light, the final system uses 120 soft motes per skylight on desktop and 60 on mobile. It adds no image texture, remains isolated to the immersive route, and disables itself when a visitor prefers reduced motion.
+
+Small, localized movement made the baked environment feel alive without distracting from the paintings or introducing a physics system.
+
+## What the process revealed
+
+The project repeatedly improved when authored intent replaced clever inference. Blender anchors were clearer than hard-coded coordinates. Explicit mappings were clearer than deriving curation from numbering. Separate entry points created a more honest performance boundary than hiding an already-loaded scene.
+
+Several other lessons now guide the project:
+
+- Camera interaction must be proven inside the real space.
+- Guided mobile viewing can serve composition better than unrestricted movement.
+- Content overlays and 3D controls need explicit ownership of input.
+- Audio should require consent and fail independently from the core experience.
+- Shared artwork data prevents 2D and 3D presentations from drifting apart.
+- Accessibility and commerce are stronger when the conventional gallery is treated as a primary experience.
+- Small procedural effects can give baked environments life without the cost of dynamic lighting or physics.
+
+Painted Paths is now more than a Three.js gallery. It is a connected publishing, exhibition, and commerce system with a lightweight entry point, a complete 2D collection, and an authored immersive route.
+
+The next decisions include whether to remember a visitor's preferred experience, whether each painting should receive an indexable HTML page, how to generate responsive WebP and AVIF artwork sources, how to measure 2D and 3D engagement without compromising privacy, and when VR or multiplayer can be introduced without destabilizing the desktop and mobile foundation.
