@@ -6,18 +6,21 @@ import ProjectGrid from '../components/ProjectGrid.astro';
 
 // Sample data (in a real project, this would come from a CMS or data files)
 const featuredProject = {
-  title: "Immersive Outcomes",
-  subtitle: "Browser-based multiplayer music rooms for shared listening, live presence, and customizable media experiences.",
-  description: "MusicSpace is a browser-based 3D multiplayer music room where users can join shared spaces by link, move around in real time, chat, see other participants live, and manage saved or guest room sessions. Signed-in users can create persistent rooms with owner/admin controls, moderate participants, and manage shared media by uploading images to wall frames or MP4 video to a shared TV, while all users can customize their experience with saved preferences like display name, avatar, audio mood, volume, and background styling across desktop and mobile.",
-  imageUrl: "/images/featured-project.jpg"
+  eyebrow: "Featured Real-Time Experience",
+  projectName: "Painted Paths",
+  subtitle: "Painted Paths is a browser-based 3D art experience built to make immersive interaction feel as intuitive as a traditional website.",
+  description: "Painted Paths is a real-time WebGL gallery designed and developed from concept through deployment using Blender, Three.js, and glTF. The experience combines optimized 3D environments, lighting, animation, audio, UI, and responsive interaction with an alternative to traditional game controls: scroll-based navigation on desktop and familiar carousel gestures on mobile. The project balances visual quality with browser performance while connecting the immersive experience to artwork, storytelling, analytics, contact, and commerce.",
+  imageUrl: "/images/featured-project.jpg",
+  imageAlt: "Painted Paths immersive art gallery shown in a web browser",
+  caseStudyUrl: "/projects/art-gallery/process/"
 };
 
 const environmentProjects = [
   {
     id: "1",
-    title: "The foundation for a scalable platform where artists, photographers, and musicians can create their own immersive galleries without requiring 3D expertise.",
-    imageUrl: "/images/env-project-17.jpg",
-    slug: "art-gallery"
+    title: "Music Space for Independent Artists featuring interactive 3D environments, ambient music, and dynamic lighting effects.",
+    imageUrl: "/images/env-project-15.jpg",
+    slug: "music-gallery"
   },
   {
     id: "2",
@@ -45,10 +48,13 @@ const environmentProjects = [
   <!-- Added ID here for scroll target -->
   <div id="featured-project">
     <FeaturedProject 
-      title="Project Highlight"
+      eyebrow={featuredProject.eyebrow}
+      projectName={featuredProject.projectName}
       subtitle={featuredProject.subtitle}
       description={featuredProject.description}
       imageUrl={featuredProject.imageUrl}
+      imageAlt={featuredProject.imageAlt}
+      buttonUrl={featuredProject.caseStudyUrl}
     />
   </div>
   

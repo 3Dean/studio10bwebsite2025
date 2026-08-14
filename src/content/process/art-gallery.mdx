@@ -3,7 +3,7 @@ title: "Building an Immersive Art Gallery for the Web"
 projectTitle: "Art Gallery"
 projectSlug: "art-gallery"
 summary: "From an early pencil sketch to connected 2D and 3D exhibitions, this is the design and development journey behind Painted Paths."
-description: "A behind-the-scenes look at the navigation experiments, Blender production, Three.js architecture, accessibility decisions, and commercial systems behind Painted Paths."
+description: "A behind-the-scenes look at the navigation experiments, Blender production, Three.js architecture, accessibility decisions, cinematic systems, and commerce behind Painted Paths."
 publishedDate: "2026-07-27"
 stage: "Ongoing"
 coverImage: "/images/env-project-17-gallery-10.jpg"
@@ -46,6 +46,16 @@ The project started on July 3, 2026, as a Three.js, Vite, and TypeScript prototy
       date: 'July 24',
       title: 'Connected 2D and 3D galleries',
       description: 'The site split into a lightweight selector, an accessible editorial collection, and an isolated immersive experience with direct artwork links between them.'
+    },
+    {
+      date: 'July 28',
+      title: 'Analytics and a cinematic camera language',
+      description: 'Privacy-conscious measurement arrived across all three entry points alongside manual, idle, and deterministic capture versions of a composed gallery tour.'
+    },
+    {
+      date: 'August 3–5',
+      title: 'Richer artwork stories and camera continuity',
+      description: 'Photo and video galleries, an interactive lit merchandise model, a hallway bridge, technical render modes, and a final authored camera target refined the experience.'
     }
   ]}
 />
@@ -110,6 +120,8 @@ Artwork data moved into a structured source containing title, medium, dimensions
 The artwork panel evolved from a compact overlay into a responsive editorial card with a thumbnail, specifications, story content, and distinct actions for originals, prints, and commissions. Interaction state remains connected to the selected artwork, so even a short inquiry carries useful context such as artwork ID, title, price, inquiry type, and source.
 
 This separation also allowed different content types to coexist safely. A “Let's Path!” T-shirt appears as the fourteenth guided 3D display, but its merchandise metadata and Etsy action remain separate from the thirteen-painting catalog. Product language does not leak into original-art or commission workflows.
+
+The shirt later became a more complete three-dimensional product presentation. Its replacement model includes distinct front and back graphics, an authored spotlight, real-time materials, and a narrowly scoped shadow path. An accessible `View Back` / `View Front` control rotates only the authored shirt controller, respects reduced-motion preferences, and resets when the panel closes. This preserves the gallery's efficient baked-material approach while applying dynamic lighting only where the product requires it.
 
 ## Refining navigation for desktop and mobile
 
@@ -194,6 +206,38 @@ Rather than simulating full volumetric light, the final system uses 120 soft mot
 
 Small, localized movement made the baked environment feel alive without distracting from the paintings or introducing a physics system.
 
+## Expanding artwork stories beyond a single image
+
+The artwork panels evolved again when selected paintings needed to show more of their process and place. Their metadata can now define an ordered mix of photographs and videos, each with full-size media, a lightweight thumbnail, alternative text, a caption, and an optional video poster.
+
+The reusable viewer adds previous and next controls, a thumbnail strip, an item counter, captions, and native inline video playback without disturbing the artwork story, specifications, or commerce actions already surrounding it. The first collections document *Mourning Moss*, *Oak Trees and Russula*, and *Platt Farm Tractor* through finished views, close details, source locations, and in-progress imagery.
+
+Large videos for *Oak Trees and Russula* and *Platt Farm Tractor* are served from Amazon S3 rather than being folded into the application bundle. Local posters and purpose-built thumbnails keep the initial panel composed and lightweight while the full media loads only when requested.
+
+## Giving the gallery a cinematic camera language
+
+Direct control and guided artwork navigation solve practical movement, but neither creates the rhythm of a filmed exhibition. A dedicated cinematic camera director was added to compose a visual journey without moving the player rig or overwriting the visitor's chosen position. When a tour ends—or is interrupted—the camera eases back to the saved view before returning control.
+
+The approximately 135-second full tour crosses all three gallery modules through eight artwork and merchandise views, a skylight-and-cloud composition, and a return through the corridor. Most shots reuse the same authored artwork waypoints, look targets, and skylight anchors already used by navigation and dust. A single typed shot configuration defines tour order, idle order, travel and hold timing, camera height, and optional offsets, so manual and idle sequences do not drift into separate implementations.
+
+After 30 seconds without pointer, keyboard, wheel, or touch input, the gallery can begin a shorter looping interlude. Any new interaction interrupts it and restores the visitor's exact view. Automatic playback is disabled for visitors who prefer reduced motion, while a manually requested tour remains available after an explicit motion warning.
+
+The final return revealed why camera continuity is also an architectural problem. After the T-shirt, the camera now turns down the hallway, glides toward the first gallery while maintaining the corridor direction, then makes a short approach before reframing the first painting. The initial aim was calculated from scene positions; it was later replaced by the authored `look_cinematic_hallway` target in the right wall-end model, with the calculation retained as a fallback.
+
+The same director powers `/experience/?cinematic=capture`, a clean single-playback recording mode with deterministic cloud, foliage, and dust timing plus explicit `loading`, `playing`, and `complete` states. The default beauty render can be replaced with `render=wireframe` or `render=clay` for technical and neutral-material captures without changing normal or idle playback.
+
+<ProcessCallout title="Cinematic principle">
+  The cinematic camera borrows the gallery's authored spatial language, but it remains separate from visitor navigation so presentation never destroys the view a visitor chose.
+</ProcessCallout>
+
+## Measuring behavior without overstating it
+
+Once Painted Paths became three independent entry points, measurement also had to respect that architecture. A centralized Vite transform injects one Google tag into the root selector, the 2D gallery, and the immersive route. The public measurement ID comes from `VITE_GA_MEASUREMENT_ID`, allowing production and preview environments to differ and allowing local builds to omit Analytics entirely.
+
+A shared typed helper records four behaviors: choosing a 2D or 3D experience, opening an artwork or merchandise detail, following an Etsy print or product link, and successfully submitting an inquiry. Event parameters contain only public content and interaction context; names, email addresses, messages, and other visitor-entered form values are excluded.
+
+The event names deliberately describe what the application can verify. An Etsy click is commercial intent, not a completed purchase. An inquiry is recorded only after Formspree reports success, not when a visitor merely opens the form. This makes the data more useful while avoiding claims the gallery cannot support.
+
 ## What the process revealed
 
 The project repeatedly improved when authored intent replaced clever inference. Blender anchors were clearer than hard-coded coordinates. Explicit mappings were clearer than deriving curation from numbering. Separate entry points created a more honest performance boundary than hiding an already-loaded scene.
@@ -207,7 +251,10 @@ Several other lessons now guide the project:
 - Shared artwork data prevents 2D and 3D presentations from drifting apart.
 - Accessibility and commerce are stronger when the conventional gallery is treated as a primary experience.
 - Small procedural effects can give baked environments life without the cost of dynamic lighting or physics.
+- Rich media belongs in structured artwork data, with heavyweight video delivered separately from the core application.
+- Cinematic playback should preserve visitor state, remain interruptible, and honor reduced-motion preferences.
+- Analytics event names should reflect only what the application can verify and should never include visitor-entered form content.
 
-Painted Paths is now more than a Three.js gallery. It is a connected publishing, exhibition, and commerce system with a lightweight entry point, a complete 2D collection, and an authored immersive route.
+Painted Paths is now more than a Three.js gallery. It is a connected publishing, exhibition, measurement, and commerce system with a lightweight entry point, a complete 2D collection, an authored immersive route, and a reusable cinematic layer.
 
-The next decisions include whether to remember a visitor's preferred experience, whether each painting should receive an indexable HTML page, how to generate responsive WebP and AVIF artwork sources, how to measure 2D and 3D engagement without compromising privacy, and when VR or multiplayer can be introduced without destabilizing the desktop and mobile foundation.
+The next decisions include whether to remember a visitor's preferred experience, whether each painting should receive an indexable HTML page, how to generate responsive WebP and AVIF artwork sources, how Analytics should be validated and governed in production, whether cinematic shots should graduate to dedicated Blender camera nodes, and when VR or multiplayer can be introduced without destabilizing the desktop and mobile foundation.
