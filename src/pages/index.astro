@@ -1,67 +1,73 @@
 ---
 import MainLayout from '../layouts/MainLayout.astro';
-import Hero from '../components/Hero.astro';
-import FeaturedProject from '../components/FeaturedProject.astro';
-import ProjectGrid from '../components/ProjectGrid.astro';
-
-// Sample data (in a real project, this would come from a CMS or data files)
-const featuredProject = {
-  eyebrow: "Featured Real-Time Experience",
-  projectName: "Painted Paths",
-  subtitle: "Designed as a browser-native 3D experience: no app, plug-in or game controls required.",
-  description: "Painted Paths is a real-time WebGL gallery designed and developed from concept through deployment using Blender, Three.js, and glTF. The experience combines optimized 3D environments, lighting, animation, audio, UI, and responsive interaction with an alternative to traditional game controls: scroll-based navigation on desktop and familiar carousel gestures on mobile. The project balances visual quality with browser performance while connecting the immersive experience to artwork, storytelling, analytics, contact, and commerce.",
-  imageUrl: "/images/featured-project.jpg",
-  imageAlt: "Painted Paths immersive art gallery shown in a web browser",
-  caseStudyUrl: "/projects/art-gallery/process/"
-};
-
-const environmentProjects = [
-  {
-    id: "1",
-    title: "Music Space for Independent Artists featuring interactive 3D environments, ambient music, and dynamic lighting effects.",
-    imageUrl: "/images/env-project-15.jpg",
-    slug: "music-gallery"
-  },
-  {
-    id: "2",
-    title: "Step back into the '80s with a nostalgic, interactive 3D arcade environment",
-    imageUrl: "/images/env-project-2.jpg",
-    slug: "videogame-gallery"
-  },
-  {
-    id: "3",
-    title: "A browser-based immersive world crafted with Three.js, where interactive lighting effects, ambient music, and dynamic particles come together to create a rich sensory experience.",
-    imageUrl: "/images/env-project-7.jpg",
-    slug: "art-music-gallery"
-  }
+import '../styles/ad-creative.css';
+const packages = [
+  { name: 'Static Ad Creative Pack', price: '149', number: '01', description: 'One promotion. Three fresh ways to stand out.', items: ['3 designed ad graphics', '3 ready-to-use captions', '1 round of revisions', '48-hour turnaround'], timing: 'Static creative for Facebook + Instagram', subject: 'Static Ad Creative Pack — $149' },
+  { name: 'Video Ad Creative Pack', price: '299', number: '02', description: 'Bring your next offer to life, one frame at a time.', items: ['1 video up to 15 seconds', 'Script and ad caption', '1 round of revisions', '3–5 business days'], timing: 'Short-form creative for Reels, Stories + Feed', subject: 'Video Ad Creative Pack — $299' }
+];
+const faqs = [
+  ['What do I need to provide?', 'Your logo, brand guidelines if you have them, photos or footage you have permission to use, and the details of your offer. Both packs use client-supplied assets. Custom photography, filming, illustration, or other production can be quoted separately.'],
+  ['When does the turnaround start?', 'Once we have agreed on the brief and received your required assets and payment. Static creative takes 48 hours; video creative takes 3–5 business days. We will confirm your delivery date before starting. Revision time depends on your feedback.'],
+  ['What is included in a revision?', 'One consolidated round of feedback to refine the agreed creative direction, such as copy, color, or pacing adjustments. A new concept, a different offer, or additional deliverables can be quoted separately.'],
+  ['Will the creative fit my social channels?', 'We agree on your intended placements and export sizes in the brief, whether that is a feed post, Story, or Reel. Let us know which channels you plan to use when you get in touch.'],
+  ['Do you run the ads or guarantee results?', 'These packages cover creative assets and copy. Media buying, campaign setup, targeting, ad spend, and performance reporting are separate from these offers. Results depend on your offer, audience, budget, and campaign setup.'],
+  ['How do booking and payment work?', 'Start with an inquiry. We will confirm the scope, asset requirements, schedule, and payment details before work begins. Sending an inquiry does not place an order or charge you.']
 ];
 ---
 
-<MainLayout title="Studio 10b - Real-Time 3D, Motion Design, and Immersive Experiences">
-  <Hero 
-    title="Real-Time 3D, Motion Design, and Immersive Experiences"
-    subtitle="Studio10b helps brands, creators, and innovators bring bold ideas to life through interactive design, visual storytelling, and emerging technology."
-    ctaText="Explore My Work"
-    ctaTarget="featured-project"
-  />
-  
-  <!-- Added ID here for scroll target -->
-  <div id="featured-project">
-    <FeaturedProject 
-      eyebrow={featuredProject.eyebrow}
-      projectName={featuredProject.projectName}
-      subtitle={featuredProject.subtitle}
-      description={featuredProject.description}
-      imageUrl={featuredProject.imageUrl}
-      imageAlt={featuredProject.imageAlt}
-      buttonUrl={featuredProject.caseStudyUrl}
-    />
+<MainLayout title="Studio 10b | Social Ad Creative from $149" description="Boutique social advertising creative by Studio 10b. Get 3 graphics and captions for $149, or a short video ad for $299. Clear scope, personal attention, fast delivery." canonicalUrl="https://studio10b.com/">
+  <div class="ad-landing">
+    <a class="skip-link" href="#creative-content">Skip to content</a>
+    <section class="ad-hero wrap" id="creative-content" aria-labelledby="hero-heading">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="status-dot" aria-hidden="true"></span> Boutique social ad creative studio</p>
+        <h1 id="hero-heading">Scroll-Stopping Creative. <span>Without the Agency Overhead.</span></h1>
+        <p class="intro">Your next offer deserves a better first impression. Professional image and video ads for small businesses ready to stand out on Facebook, Instagram, and beyond.</p>
+        <div class="actions"><a class="ad-button" href="#packages">Find your creative pack <span aria-hidden="true">↗</span></a><a class="text-link" href="#sample-work">Explore the possibilities ↓</a></div>
+        <p class="hero-note">Fixed-scope packages. Direct collaboration. From $149.</p>
+      </div>
+      <div class="hero-art" aria-label="Illustrative ad concept: Make some noise. Your next big thing starts here.">
+        <div class="art-top"><span>STUDIO 10b / CREATIVE LAB</span><span>CONCEPT 001</span></div>
+        <div class="orbit" aria-hidden="true"></div>
+        <p class="art-title">MAKE<br />SOME<br /><em>NOISE.</em></p>
+        <div class="art-bottom"><span>Your next big thing<br />starts here.</span><span class="art-arrow" aria-hidden="true">↗</span></div>
+        <span class="art-sticker">BUILT FOR<br />THE SCROLL</span>
+      </div>
+    </section>
+    <div class="studio-strip"><div class="wrap"><span>Small studio. Big creative energy.</span><span>Art direction / Design / Motion / Copy</span></div></div>
+
+    <section class="wrap section" id="packages" aria-labelledby="packages-heading">
+      <p class="eyebrow">01 / Two ways to show up</p>
+      <div class="section-heading"><h2 id="packages-heading">A clear offer.<br />A creative edge.</h2><p>Choose your format. We’ll turn your assets and promotion into polished creative with a focused message.</p></div>
+      <div class="package-grid">{packages.map(pack => <article class="package-card">
+        <div class="card-top"><span class="eyebrow">PACK {pack.number}</span><span class="format-tag">{pack.number === '01' ? 'IMAGE + COPY' : 'MOTION + COPY'}</span></div>
+        <h3>{pack.name}</h3><p>{pack.description}</p><p class="price"><span class="currency">$</span>{pack.price}<span class="price-note"> / pack · USD</span></p>
+        <ul>{pack.items.map(item => <li><span aria-hidden="true">↗</span>{item}</li>)}</ul>
+        <a class="ad-button" href={`mailto:deanyeager@studio10b.com?subject=${encodeURIComponent(pack.subject)}`}>Inquire about {pack.number === '01' ? 'static' : 'video'} creative <span aria-hidden="true">↗</span></a>
+        <p class="small-note">{pack.timing}</p>
+      </article>)}</div>
+      <p class="scope-note">One business, one promotion, client-supplied assets. Delivery begins after the brief, assets, and payment are confirmed. Custom production quoted separately.</p>
+    </section>
+
+    <section class="work-section section" id="sample-work" aria-labelledby="work-heading"><div class="wrap">
+      <p class="eyebrow">02 / Imagine your brand here</p><div class="section-heading"><h2 id="work-heading">Made for the feed.<br />Designed to feel different.</h2><p>Illustrative placeholders for upcoming sample work. These are concept layouts, not client campaigns or performance results.</p></div>
+      <div class="sample-grid">
+        <figure><div class="sample sample-food"><span class="sample-label">RESTAURANT / STATIC CONCEPT</span><p>GOOD<br />TASTE.<br /><em>GREAT<br />NIGHTS.</em></p><span class="sample-foot">YOUR NEXT TABLE IS WAITING ↗</span></div><figcaption>Local flavor. A compelling invitation.</figcaption></figure>
+        <figure><div class="sample sample-retail"><span class="sample-label">RETAIL / STATIC CONCEPT</span><div class="sample-ring" aria-hidden="true"></div><p>LESS<br /><em>ORDINARY.</em></p><span class="sample-foot">MEET YOUR NEW EVERYDAY ↗</span></div><figcaption>A new collection, with a point of view.</figcaption></figure>
+        <figure><div class="sample sample-video"><span class="sample-label">SERVICES / VIDEO STORYBOARD</span><p>BIG<br />IDEAS.<br /><em>IN MOTION.</em></p><div class="timeline" aria-hidden="true"><span></span><span></span><span></span></div><span class="sample-foot">HOOK → OFFER → ACTION / UP TO 15 SEC</span></div><figcaption>A storyboard placeholder for a short video ad.</figcaption></figure>
+      </div><a class="text-link" href="/projects">Explore the studio’s broader creative work ↗</a>
+      <a class="text-link" href="/immersive">Discover immersive experiences &#8599;</a></div></section>
+
+    <section class="wrap section" aria-labelledby="process-heading"><p class="eyebrow">03 / A simple process</p><h2 id="process-heading">From “we need an ad”<br />to ready to publish.</h2><ol class="process-grid">
+      <li><span>01</span><h3>Tell us the story.</h3><p>Share your offer, audience, brand assets, and intended placements. We confirm the brief and schedule.</p></li>
+      <li><span>02</span><h3>We make it creative.</h3><p>Design and copy come together around one clear message, with a first delivery in your pack’s timeframe.</p></li>
+      <li><span>03</span><h3>Refine. Then launch.</h3><p>Send one round of consolidated feedback. Receive final exports and copy, ready for you to publish.</p></li>
+    </ol></section>
+
+    <section class="credibility section"><div class="wrap credibility-grid"><div><p class="eyebrow">04 / Meet your creative partner</p><h2>Senior creative thinking.<br /><span>Personal studio attention.</span></h2></div><div><p class="intro">Work directly with Dean Yeager, the creative behind Studio 10b.</p><p>With 20+ years of art direction and design experience, and a background working on brands including MetLife, Dove Men+Care, and Heineken USA, Dean brings an experienced eye to your next promotion.</p><p>Clear communication, thoughtful craft, and a defined scope keep your project moving.</p><a class="text-link" href="/about">More about the studio ↗</a></div></div></section>
+
+    <section class="wrap section faq-section" aria-labelledby="faq-heading"><div><p class="eyebrow">05 / Good questions</p><h2 id="faq-heading">A few details,<br />before we begin.</h2></div><div>{faqs.map(([question, answer]) => <details><summary>{question}</summary><p>{answer}</p></details>)}</div></section>
+
+    <section class="contact-band section" id="start" aria-labelledby="contact-heading"><div class="wrap"><p class="eyebrow">YOUR NEXT PROMOTION STARTS HERE</p><h2 id="contact-heading">Let’s make something<br />worth stopping for.</h2><p>Tell us what you’re promoting and which pack you have in mind.</p><div class="actions"><a class="ad-button" href="/contact">Start a project <span aria-hidden="true">↗</span></a><a class="text-link" href="mailto:deanyeager@studio10b.com">deanyeager@studio10b.com</a></div><p class="small-note">An inquiry starts a conversation. No charge or commitment.</p></div></section>
   </div>
-  
-  <ProjectGrid 
-    title="Immersive Outcomes"
-    description="Immersive 3D spaces for galleries, presentations, fashion, and film — featuring audio, video, and interactive design for memorable digital experiences."
-    projects={environmentProjects}
-    buttonText="View Projects"
-  />
 </MainLayout>

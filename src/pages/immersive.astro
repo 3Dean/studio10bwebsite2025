@@ -1,0 +1,67 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import Hero from '../components/Hero.astro';
+import FeaturedProject from '../components/FeaturedProject.astro';
+import ProjectGrid from '../components/ProjectGrid.astro';
+
+// Sample data (in a real project, this would come from a CMS or data files)
+const featuredProject = {
+  eyebrow: "Featured Real-Time Experience",
+  projectName: "Painted Paths",
+  subtitle: "Designed as a browser-native 3D experience: no app, plug-in or game controls required.",
+  description: "Painted Paths is a real-time WebGL gallery designed and developed from concept through deployment using Blender, Three.js, and glTF. The experience combines optimized 3D environments, lighting, animation, audio, UI, and responsive interaction with an alternative to traditional game controls: scroll-based navigation on desktop and familiar carousel gestures on mobile. The project balances visual quality with browser performance while connecting the immersive experience to artwork, storytelling, analytics, contact, and commerce.",
+  imageUrl: "/images/featured-project.jpg",
+  imageAlt: "Painted Paths immersive art gallery shown in a web browser",
+  caseStudyUrl: "/projects/art-gallery/process/"
+};
+
+const environmentProjects = [
+  {
+    id: "1",
+    title: "Music Space for Independent Artists featuring interactive 3D environments, ambient music, and dynamic lighting effects.",
+    imageUrl: "/images/env-project-15.jpg",
+    slug: "music-gallery"
+  },
+  {
+    id: "2",
+    title: "Step back into the '80s with a nostalgic, interactive 3D arcade environment",
+    imageUrl: "/images/env-project-2.jpg",
+    slug: "videogame-gallery"
+  },
+  {
+    id: "3",
+    title: "A browser-based immersive world crafted with Three.js, where interactive lighting effects, ambient music, and dynamic particles come together to create a rich sensory experience.",
+    imageUrl: "/images/env-project-7.jpg",
+    slug: "art-music-gallery"
+  }
+];
+---
+
+<MainLayout title="Studio 10b - Real-Time 3D, Motion Design, and Immersive Experiences">
+  <Hero 
+    title="Real-Time 3D, Motion Design, and Immersive Experiences"
+    subtitle="Studio10b helps brands, creators, and innovators bring bold ideas to life through interactive design, visual storytelling, and emerging technology."
+    ctaText="Explore My Work"
+    ctaTarget="featured-project"
+  />
+  
+  <!-- Added ID here for scroll target -->
+  <div id="featured-project">
+    <FeaturedProject 
+      eyebrow={featuredProject.eyebrow}
+      projectName={featuredProject.projectName}
+      subtitle={featuredProject.subtitle}
+      description={featuredProject.description}
+      imageUrl={featuredProject.imageUrl}
+      imageAlt={featuredProject.imageAlt}
+      buttonUrl={featuredProject.caseStudyUrl}
+    />
+  </div>
+  
+  <ProjectGrid 
+    title="Immersive Outcomes"
+    description="Immersive 3D spaces for galleries, presentations, fashion, and film — featuring audio, video, and interactive design for memorable digital experiences."
+    projects={environmentProjects}
+    buttonText="View Projects"
+  />
+</MainLayout>

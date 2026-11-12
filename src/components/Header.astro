@@ -6,7 +6,7 @@ import AnimatedStudio10BLogo from './AnimatedStudio10BLogo.astro';
 <header class="fixed top-0 left-0 w-full z-50 bg-black bg-opacity-90 backdrop-blur-sm py-6 transition-all duration-300">
   <div class="container mx-auto px-4 md:px-8 max-w-screen-xl">
     <div class="flex justify-between items-center">
-      <a href="/" class="block">
+      <a href="/" class="block" aria-label="Studio 10b home">
         <AnimatedStudio10BLogo />
       </a>
       <Navigation />
@@ -14,5 +14,11 @@ import AnimatedStudio10BLogo from './AnimatedStudio10BLogo.astro';
   </div>
 </header>
 
-<!-- Spacer to prevent content from hiding behind fixed header 
+<!-- Spacer to prevent content from hiding behind fixed header
 <div class="h-24"></div>-->
+<style>
+  @media (max-width: 540px) {
+    header { padding-block: 14px; }
+    header > div > div { flex-direction: column; gap: 12px; }
+  }
+</style>

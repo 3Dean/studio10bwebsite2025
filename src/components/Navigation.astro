@@ -8,12 +8,12 @@ const navItems = [
 const currentPath = Astro.url.pathname;
 ---
 
-<nav>
-  <ul class="flex gap-10 md:gap-20 list-none p-0 m-0">
+<nav aria-label="Main navigation">
+  <ul class="flex gap-6 md:gap-20 list-none p-0 m-0">
     {navItems.map(item => (
       <li>
-        <a 
-          href={item.url} 
+        <a
+          href={item.url} aria-current={currentPath.replace(/\/$/, '') === item.url ? 'page' : undefined}
           class={`text-white no-underline text-base font-medium transition-opacity duration-300 hover:opacity-80 ${currentPath === item.url ? 'opacity-80' : 'opacity-100'}`}
         >
           {item.label}
